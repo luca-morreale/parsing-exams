@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 /**
  * @author Luca Morreale
@@ -17,7 +19,7 @@ public final class GUI extends JFrame implements ActionListener{
     private static final long serialVersionUID = 3194012730957326358L;
 
     private MainWindowMenu menuBar;
-    private MediaTable mediaTable;
+    private JTabbedPane tabbedPane;
 
     public GUI(){
 
@@ -28,14 +30,21 @@ public final class GUI extends JFrame implements ActionListener{
         this.setLayout(new BorderLayout(0, 0));
 
         menuBar = new MainWindowMenu(this);
-        setJMenuBar(menuBar);
+        this.setJMenuBar(menuBar);
+
+
+        tabbedPane = new JTabbedPane(SwingConstants.TOP);
+        populateTabbedPane();
+        this.add(tabbedPane, BorderLayout.CENTER);
 
         this.pack();
         this.setLocationRelativeTo(null);
 
+    }
 
-        //JMenuBar menuBar = new JMenuBar();
-        //getContentPane().add(menuBar, BorderLayout.NORTH);
+    private void populateTabbedPane(){
+
+
     }
 
     public void actionPerformed(ActionEvent evt) {
