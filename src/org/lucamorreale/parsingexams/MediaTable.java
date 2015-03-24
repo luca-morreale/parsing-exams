@@ -15,28 +15,6 @@ import javax.swing.event.TableModelListener;
 public final class MediaTable extends JTable implements TableModelListener{
     private static final long serialVersionUID = 3012089127775134645L;
 
-    /**
-     * Enum containing the base information of the table columns
-     * @author Luca Morreale
-     *
-     */
-    private enum Column{
-        CORSO("Corso"), ESITO("Esito"), CREDITI("Crediti");
-
-        @SuppressWarnings("rawtypes")
-        public static Class[] TYPE = new Class[] { String.class, Short.class, Short.class };
-
-        String msg;
-        Column(String msg){
-            this.msg = msg;
-        }
-
-        @Override
-        public String toString(){
-            return msg;
-        }
-    }
-
     private KeyTableModel model;
 
     public MediaTable(){
@@ -67,5 +45,26 @@ public final class MediaTable extends JTable implements TableModelListener{
         this.getColumnModel().getColumn(2).setMaxWidth(200);
     }
 
+    /**
+     * Enum containing the base information of the table columns
+     * @author Luca Morreale
+     *
+     */
+    private enum Column{
+        CORSO("Corso"), ESITO("Esito"), CREDITI("Crediti");
+
+        @SuppressWarnings("rawtypes")
+        public static Class[] TYPE = new Class[] { String.class, Short.class, Short.class };
+
+        String msg;
+        Column(String msg){
+            this.msg = msg;
+        }
+
+        @Override
+        public String toString(){
+            return msg;
+        }
+    }
 
 }
