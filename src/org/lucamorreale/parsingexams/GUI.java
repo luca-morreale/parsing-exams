@@ -20,10 +20,9 @@ public final class GUI extends JFrame implements ActionListener{
 
     private MainWindowMenu menuBar;
     private JTabbedPane tabbedPane;
-
+    private MediaPane mediaTab;
     public GUI(){
-
-        this.setTitle("Academic Exams Parser");
+        super("Academic Exams Parser");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GUI.setDefaultLookAndFeelDecorated(true);
 
@@ -31,6 +30,8 @@ public final class GUI extends JFrame implements ActionListener{
 
         menuBar = new MainWindowMenu(this);
         this.setJMenuBar(menuBar);
+
+        mediaTab = new MediaPane();
 
 
         tabbedPane = new JTabbedPane(SwingConstants.TOP);
@@ -44,6 +45,7 @@ public final class GUI extends JFrame implements ActionListener{
 
     private void populateTabbedPane(){
 
+        tabbedPane.addTab("Media Esami",mediaTab);
 
     }
 
