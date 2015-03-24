@@ -52,7 +52,7 @@ public final class MainWindowMenu extends JMenuBar{
 
     @SuppressWarnings("unused")
     private void starBugDialog() {
-
+        //start a dialog specifying where to notify a bug
     }
 
 

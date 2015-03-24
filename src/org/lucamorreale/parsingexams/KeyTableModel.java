@@ -16,10 +16,6 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class KeyTableModel extends DefaultTableModel{
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 2164354135898159481L;
 
     /**

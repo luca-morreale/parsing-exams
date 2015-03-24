@@ -13,6 +13,7 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 public class JLetterField extends JTextField {
+    private static final long serialVersionUID = -8862152569280755161L;
 
     public JLetterField() {
         super();
@@ -28,6 +29,7 @@ public class JLetterField extends JTextField {
     }
 
     static class LetterDocument extends PlainDocument {
+        private static final long serialVersionUID = 8610474166849627205L;
 
         @Override
         public void insertString( int offs, String str, AttributeSet a )
