@@ -30,6 +30,11 @@ public class KeyTableModel extends DefaultTableModel{
     protected Vector keys;
 
     /**
+     * Array containing the class type for the model columns
+     */
+    protected Class[] columnTypes;
+
+    /**
      * Creates an empty model for the table with zero rows and zero columns, and also zero keys.
      */
     public KeyTableModel() {
@@ -383,6 +388,15 @@ public class KeyTableModel extends DefaultTableModel{
         v.add(obj);
         return v;
     }
+
+    /**
+     * Set the column type
+     * @param type      array of Class
+     */
+    public void setColumnsClass(Class[] type){
+        this.columnTypes = type;
+    }
+
 
     /**
      *

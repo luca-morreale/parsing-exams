@@ -16,6 +16,9 @@ import javax.swing.JFrame;
 public final class GUI extends JFrame implements ActionListener{
     private static final long serialVersionUID = 3194012730957326358L;
 
+    private MainWindowMenu menuBar;
+    private MediaTable mediaTable;
+
     public GUI(){
 
         this.setTitle("Academic Exams Parser");
@@ -24,7 +27,7 @@ public final class GUI extends JFrame implements ActionListener{
 
         this.setLayout(new BorderLayout(0, 0));
 
-        MainWindowMenu menuBar = new MainWindowMenu(this);
+        menuBar = new MainWindowMenu(this);
         setJMenuBar(menuBar);
 
         this.pack();
@@ -38,6 +41,10 @@ public final class GUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent evt) {
         // TODO Auto-generated method stub
 
+    }
+
+    public void exit(){
+        System.exit(0);
     }
 
 }
