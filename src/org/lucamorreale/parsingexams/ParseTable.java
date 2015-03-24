@@ -17,6 +17,7 @@ public final class ParseTable extends JTable{
     private KeyTableModel model;
 
     public ParseTable(){
+        super();
 
         this.model = new KeyTableModel();
         for (Column c : Column.values()) {

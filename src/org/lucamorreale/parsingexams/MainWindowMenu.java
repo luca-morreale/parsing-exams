@@ -20,7 +20,7 @@ public final class MainWindowMenu extends JMenuBar{
     private ActionListener actionToCall;
 
     public MainWindowMenu(ActionListener listenerToCall){
-
+        super();
         this.actionToCall = listenerToCall;
 
         buildFile();

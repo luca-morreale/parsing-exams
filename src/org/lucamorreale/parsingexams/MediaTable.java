@@ -18,6 +18,7 @@ public final class MediaTable extends JTable implements TableModelListener{
     private KeyTableModel model;
 
     public MediaTable(){
+        super();
 
         this.model = new KeyTableModel();
         for (Column c : Column.values()) {
