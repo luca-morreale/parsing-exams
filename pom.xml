@@ -8,13 +8,26 @@
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+            <archive>
+	          <manifest>
+	            <addClasspath>true</addClasspath>
+	            <classpathPrefix>lib/</classpathPrefix>
+	            <mainClass>org.lucamorreale.parsingexams.Main</mainClass>
+	          </manifest>
+            </archive>
+            <source>1.7</source>
+            <target>1.7</target>
         </configuration>
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.apache.pdfbox</groupId>
+  		<artifactId>pdfbox</artifactId>
+  		<version>1.8.8</version>
+  	</dependency>
+  </dependencies>
 </project>
