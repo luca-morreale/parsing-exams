@@ -4,6 +4,7 @@
 package org.lucamorreale.parsingexams;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -45,7 +46,7 @@ public final class ParsePane extends JPanel {
 
     private void generateTopPane(){
 
-        JPanel topPane = new JPanel();
+        JPanel topPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         try{
             addBtn.setIcon(new ImageIcon(Main.class.getResource("/resources/images/add.png")));

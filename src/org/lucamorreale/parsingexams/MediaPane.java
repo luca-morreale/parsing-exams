@@ -5,6 +5,7 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
@@ -55,7 +56,7 @@ public final class MediaPane extends JPanel implements ActionListener{
 
     private void generateTopPane(){
 
-        JPanel topPane = new JPanel();
+        JPanel topPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         try{
             addBtn.setIcon(new ImageIcon(Main.class.getResource("/resources/images/add.png")));
