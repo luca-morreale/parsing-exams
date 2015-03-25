@@ -59,7 +59,7 @@ public final class MediaPane extends JPanel implements ActionListener{
 
         try{
             addBtn.setIcon(new ImageIcon(Main.class.getResource("/resources/images/add.png")));
-            removeBtn.setIcon(new ImageIcon(GUI.class.getResource("/resources/images/delete_all.png")));
+            removeBtn.setIcon(new ImageIcon(GUI.class.getResource("/resources/images/delete.png")));
             exportBtn.setIcon(new ImageIcon(GUI.class.getResource("/resources/images/save.png")));
         } catch(NullPointerException exc) {
             LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
