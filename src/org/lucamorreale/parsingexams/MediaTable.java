@@ -46,6 +46,11 @@ public final class MediaTable extends JTable implements TableModelListener{
         this.getColumnModel().getColumn(2).setMaxWidth(200);
     }
 
+    public int getMedia(){
+
+        return 0;
+    }
+
     /**
      * Enum containing the base information of the table columns
      * @author Luca Morreale

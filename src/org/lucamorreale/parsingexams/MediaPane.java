@@ -4,9 +4,14 @@
 package org.lucamorreale.parsingexams;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -14,13 +19,15 @@ import javax.swing.JScrollPane;
  * @author Luca Morreale
  *
  */
-public final class MediaPane extends JPanel {
+public final class MediaPane extends JPanel implements ActionListener{
     private static final long serialVersionUID = 4619821091873343199L;
 
     private MediaTable tMedia;
     private PlainButton addBtn;
     private PlainButton removeBtn;
     private PlainButton exportBtn;
+    private JButton calculateBtn;
+    private JLabel mediaLabel;
 
 
 
@@ -29,7 +36,6 @@ public final class MediaPane extends JPanel {
 
         this.setLayout(new BorderLayout());
 
-
         addBtn = new PlainButton("Aggiungi Corso");
         removeBtn = new PlainButton("Elimina Corso");
         exportBtn = new PlainButton("Esporta Tabella");
@@ -37,11 +43,14 @@ public final class MediaPane extends JPanel {
 
 
         tMedia = new MediaTable();
-        JScrollPane scroll = new JScrollPane();
-        scroll.setViewportView(tMedia);
+        generateCenterPane();
 
 
-        this.add(scroll, BorderLayout.CENTER);
+        calculateBtn = new JButton("Calcola Media");
+        mediaLabel = new JLabel("");
+        generateBottomPane();
+
+
     }
 
     private void generateTopPane(){
@@ -63,6 +72,35 @@ public final class MediaPane extends JPanel {
         this.add(topPane, BorderLayout.NORTH);
     }
 
-    private static final Logger LOG = Logger.getLogger(MediaPane.class.getName());
+    private void generateCenterPane(){
 
+        JScrollPane scroll = new JScrollPane();
+        scroll.setViewportView(tMedia);
+        this.add(scroll, BorderLayout.CENTER);
+    }
+
+    private void generateBottomPane(){
+
+        JPanel panel = new JPanel(new BorderLayout(0, 0));
+
+        calculateBtn.addActionListener(this);
+        calculateBtn.setBackground(Color.ORANGE);
+        panel.add(mediaLabel, BorderLayout.WEST);
+        panel.add(calculateBtn, BorderLayout.EAST);
+
+        this.add(panel, BorderLayout.SOUTH);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        if(tMedia.getRowCount() == 0){
+            mediaLabel.setText("Media Pesata: "+tMedia.getMedia());
+            return;
+        } else {
+            mediaLabel.setText("Media Pesata: "+tMedia.getMedia());
+        }
+
+    }
+
+
+    private static final Logger LOG = Logger.getLogger(MediaPane.class.getName());
 }
