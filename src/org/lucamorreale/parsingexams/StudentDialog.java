@@ -33,10 +33,11 @@ public final class StudentDialog extends JDialog {
 
 
     public StudentDialog() {
+        super();
         this.setAlwaysOnTop(true);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setTitle("Aggiungi Matricola");
-        getContentPane().setLayout(new BorderLayout(0, 0));
+        this.setLayout(new BorderLayout(0, 0));
 
 
         saveButton = new JButton("Salva");
@@ -51,12 +52,11 @@ public final class StudentDialog extends JDialog {
         generateCenterPane();
 
 
-        pack();
-        setLocationRelativeTo(null);
+        this.pack();
+
+        this.setLocationRelativeTo(null);
 
         db = new SQLiteManager("jdbc:sqlite:data/source.sqlite");
-        db.query("CREATE TABLE IF NOT EXISTS matricole (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL , Nome TEXT, Cognome TEXT, Matricola TEXT NOT NULL  UNIQUE )", false);
-
     }
 
     private void generateButtonPane(){

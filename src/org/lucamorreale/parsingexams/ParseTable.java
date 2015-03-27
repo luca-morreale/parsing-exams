@@ -78,16 +78,16 @@ public final class ParseTable extends JTable{
 
         model.removeTableModelListener(this);
 
-        String fields[] = new String[3];
+        String fields[] = new String[4];
         int i = 0;
         for (Column c : Column.values()) {
             fields[i++] = c.toString().toLowerCase();
         }
 
-        Object[] values = new Object[fields.length];
+        Object[] values = new Object[fields.length-1];
         while(db.hasNext()){
             if(!model.existsKey(db.getField("id"))){
-                for(i = 0;i < fields.length; i++) {
+                for(i = 0;i < fields.length-1; i++) {
                     values[i] = db.getField(fields[i]);
                 }
                 model.addRow(values, db.getField("id"));
@@ -96,6 +96,22 @@ public final class ParseTable extends JTable{
 
         model.addTableModelListener(this);
         notifyAll();
+    }
+
+    public void addStudent(){
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                StudentDialog student = new StudentDialog();
+                student.setVisible(true);
+                student.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        refresh();
+                    }
+                });
+            }
+        });
     }
 
 
