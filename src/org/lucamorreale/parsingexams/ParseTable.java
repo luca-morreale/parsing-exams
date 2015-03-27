@@ -53,7 +53,7 @@ public final class ParseTable extends JTable{
         this.getColumnModel().getColumn(3).setPreferredWidth(232);
         this.getColumnModel().getColumn(3).setMinWidth(50);
         this.getColumnModel().getColumn(3).setMaxWidth(500);
-        
+
         this.getTableHeader().setReorderingAllowed(false);
     }
 
@@ -65,6 +65,37 @@ public final class ParseTable extends JTable{
         }
 
         model.addTableModelListener(this);
+
+        notifyAll();
+    }
+
+    public synchronized void refresh(){
+        if(!db.isConnected()) {
+            return;
+        }
+
+        db.selectQuery("parse", null, "*", "ORDER BY nome");
+
+        model.removeTableModelListener(this);
+
+        String fields[] = new String[3];
+        int i = 0;
+        for (Column c : Column.values()) {
+            fields[i++] = c.toString().toLowerCase();
+        }
+
+        Object[] values = new Object[fields.length];
+        while(db.hasNext()){
+            if(!model.existsKey(db.getField("id"))){
+                for(i = 0;i < fields.length; i++) {
+                    values[i] = db.getField(fields[i]);
+                }
+                model.addRow(values, db.getField("id"));
+            }
+        }
+
+        model.addTableModelListener(this);
+        notifyAll();
     }
 
 
