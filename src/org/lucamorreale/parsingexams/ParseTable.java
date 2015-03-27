@@ -29,6 +29,7 @@ public final class ParseTable extends JTable{
         this.setModel(this.model);
         this.setColumnWidth();
         this.setBackground(Color.WHITE);
+
     }
 
     private void setColumnWidth(){
@@ -44,6 +45,19 @@ public final class ParseTable extends JTable{
         this.getColumnModel().getColumn(3).setMinWidth(50);
         this.getColumnModel().getColumn(3).setMaxWidth(500);
     }
+
+    public synchronized void clearResults(){
+
+        model.removeTableModelListener(this);
+        for(int i=0; i<model.getRowCount(); i++){
+            this.setValueAt("", i, 3);
+        }
+
+        model.addTableModelListener(this);
+    }
+
+
+
 
     /**
      * Enum containing the base information of the table columns

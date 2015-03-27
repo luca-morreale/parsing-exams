@@ -5,6 +5,8 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.beans.EventHandler;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -32,15 +34,14 @@ public final class ParsePane extends JPanel {
 
         this.setLayout(new BorderLayout());
 
+        tParse = new ParseTable();
+        generateCenterPane();
+
         addBtn = new PlainButton("Aggiungi Matricola");
         openBtn = new PlainButton("Esamina File");
         clearBtn = new PlainButton("Pulisci Tabella");
         exportBtn = new PlainButton("Esporta Tabella");
         generateTopPane();
-
-
-        tParse = new ParseTable();
-        generateCenterPane();
 
     }
 
@@ -56,6 +57,8 @@ public final class ParsePane extends JPanel {
         } catch(NullPointerException exc) {
             LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
         }
+
+        clearBtn.addActionListener(EventHandler.create(ActionListener.class, tParse, "clearResults"));
 
         topPane.add(addBtn);
         topPane.add(openBtn);
