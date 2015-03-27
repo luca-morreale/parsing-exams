@@ -77,9 +77,41 @@ public final class MediaTable extends JTable implements TableModelListener{
 
         result = result.divide(denominatore, 2, RoundingMode.HALF_UP);
 
-
+        notifyAll();
         return String.valueOf(result.toString());
     }
+
+
+    public synchronized void refresh(){
+        if(!db.isConnected()) {
+            return;
+        }
+
+        db.selectQuery("media", null, "*", "ORDER BY corso");
+
+        model.removeTableModelListener(this);
+
+        String fields[] = new String[3];
+        int i = 0;
+        for (Column c : Column.values()) {
+            fields[i++] = c.toString().toLowerCase();
+        }
+
+        Object[] values = new Object[fields.length];
+        while(db.hasNext()){
+            if(!model.existsKey(db.getField("id"))){
+                for(i = 0;i < fields.length; i++) {
+                    values[i] = db.getField(fields[i]);
+                }
+                model.addRow(values, db.getField("id"));
+            }
+        }
+
+        model.addTableModelListener(this);
+        notifyAll();
+    }
+
+
 
     /**
      * Enum containing the base information of the table columns
