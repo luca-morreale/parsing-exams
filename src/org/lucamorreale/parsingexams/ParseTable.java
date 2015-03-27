@@ -4,6 +4,7 @@
 package org.lucamorreale.parsingexams;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 
 import javax.swing.JTable;
 
@@ -14,6 +15,7 @@ import javax.swing.JTable;
 public final class ParseTable extends JTable{
     private static final long serialVersionUID = -9029444808468680306L;
 
+    private SQLiteManager db;
     private KeyTableModel model;
 
     public ParseTable(){
@@ -29,6 +31,13 @@ public final class ParseTable extends JTable{
         this.setModel(this.model);
         this.setColumnWidth();
         this.setBackground(Color.WHITE);
+
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                db = new SQLiteManager("jdbc:sqlite:data/source.sqlite");
+            }
+        });
 
     }
 
