@@ -5,6 +5,8 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
@@ -54,9 +56,27 @@ public final class MediaTable extends JTable implements TableModelListener{
         this.getColumnModel().getColumn(2).setMaxWidth(200);
     }
 
-    public int getMedia(){
+    public synchronized String getMedia(){
 
-        return 0;
+        if(this.getRowCount() == 0){
+            return "";
+        }
+
+        BigDecimal result = new BigDecimal("0.00");
+        BigDecimal denominatore = new BigDecimal("0.00");
+        BigDecimal crediti, esito;
+        for(int i = 0; i < this.getRowCount(); i++){
+            crediti = new BigDecimal(this.getValueAt(i, 2).toString());
+            esito = new BigDecimal(this.getValueAt(i, 1).toString());
+
+            denominatore = denominatore.add(crediti);
+            result = result.add(crediti.multiply(esito));
+        }
+
+        result = result.divide(denominatore, 2, RoundingMode.HALF_UP);
+
+
+        return String.valueOf(result.toString());
     }
 
     /**

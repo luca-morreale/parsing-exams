@@ -92,12 +92,13 @@ public final class MediaPane extends JPanel implements ActionListener{
         this.add(panel, BorderLayout.SOUTH);
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
         if(tMedia.getRowCount() == 0){
-            mediaLabel.setText("Media Pesata: "+tMedia.getMedia());
+            mediaLabel.setText("Media Pesata: " + tMedia.getMedia());
             return;
         } else {
-            mediaLabel.setText("Media Pesata: "+tMedia.getMedia());
+            mediaLabel.setText("Media Pesata: " + tMedia.getMedia());
         }
 
     }
