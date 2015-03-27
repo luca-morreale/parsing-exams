@@ -45,6 +45,10 @@ public final class SQLiteManager {
         }
     }
 
+    public boolean isConnected(){
+        return (conn!= null);
+    }
+
 
 
     /**
