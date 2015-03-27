@@ -53,6 +53,8 @@ public final class ParseTable extends JTable{
         this.getColumnModel().getColumn(3).setPreferredWidth(232);
         this.getColumnModel().getColumn(3).setMinWidth(50);
         this.getColumnModel().getColumn(3).setMaxWidth(500);
+
+        this.getTableHeader().setReorderingAllowed(false);
     }
 
     public synchronized void clearResults(){

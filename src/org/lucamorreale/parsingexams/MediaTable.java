@@ -54,6 +54,8 @@ public final class MediaTable extends JTable implements TableModelListener{
         this.getColumnModel().getColumn(2).setPreferredWidth(100);
         this.getColumnModel().getColumn(2).setMinWidth(50);
         this.getColumnModel().getColumn(2).setMaxWidth(200);
+
+        this.getTableHeader().setReorderingAllowed(false);
     }
 
     public synchronized String getMedia(){
