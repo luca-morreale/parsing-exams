@@ -137,4 +137,14 @@ public class CourseDialog extends JDialog {
         return true;
     }
 
+    public void saveResult(){
+        db.insertQuery("esami", new String[][]{
+                {"corso", courseLetterField.getText()},
+                {"esito", resultIntField.getText()},
+                {"crediti", creditIntField.getText()},
+        });
+
+        dispose();
+    }
+
 }
