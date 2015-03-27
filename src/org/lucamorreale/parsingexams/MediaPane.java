@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.EventHandler;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -37,14 +38,13 @@ public final class MediaPane extends JPanel implements ActionListener{
 
         this.setLayout(new BorderLayout());
 
+        tMedia = new MediaTable();
+        generateCenterPane();
+
         addBtn = new PlainButton("Aggiungi Corso");
         removeBtn = new PlainButton("Elimina Corso");
         exportBtn = new PlainButton("Esporta Tabella");
         generateTopPane();
-
-
-        tMedia = new MediaTable();
-        generateCenterPane();
 
 
         calculateBtn = new JButton("Calcola Media");
@@ -65,6 +65,8 @@ public final class MediaPane extends JPanel implements ActionListener{
         } catch(NullPointerException exc) {
             LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
         }
+
+        addBtn.addActionListener(EventHandler.create(ActionListener.class, tMedia, "addCourse"));
 
         topPane.add(addBtn);
         topPane.add(removeBtn);
