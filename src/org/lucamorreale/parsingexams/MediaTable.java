@@ -12,13 +12,12 @@ import java.math.RoundingMode;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.event.TableModelListener;
 
 /**
  * @author Luca Morreale
  *
  */
-public final class MediaTable extends JTable implements TableModelListener, MouseListener{
+public final class MediaTable extends JTable implements MouseListener{
     private static final long serialVersionUID = 3012089127775134645L;
 
     private SQLiteManager db;
