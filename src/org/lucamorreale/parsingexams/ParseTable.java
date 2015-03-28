@@ -5,6 +5,8 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -16,11 +18,12 @@ import javax.swing.SwingUtilities;
  * @author Luca Morreale
  *
  */
-public final class ParseTable extends JTable implements MouseListener{
+public final class ParseTable extends JTable implements MouseListener, ActionListener{
     private static final long serialVersionUID = -9029444808468680306L;
 
     private SQLiteManager db;
     private KeyTableModel model;
+    private TablePopupMenu popupMenu;
 
     public ParseTable(){
         super();
@@ -31,6 +34,10 @@ public final class ParseTable extends JTable implements MouseListener{
         }
         model.setColumnsClass(Column.TYPE);
         model.addTableModelListener(this);
+
+        popupMenu = new TablePopupMenu(this);
+        this.setComponentPopupMenu(popupMenu);
+        this.setInheritsPopupMenu(true);
 
         this.setModel(this.model);
         this.setColumnWidth();
@@ -146,7 +153,6 @@ public final class ParseTable extends JTable implements MouseListener{
             }
             model.addTableModelListener(this);
         }
-
     }
 
     private void emptyTableMessage() {
@@ -158,7 +164,10 @@ public final class ParseTable extends JTable implements MouseListener{
         });
     }
 
-
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+    }
 
 
     @Override
@@ -216,5 +225,7 @@ public final class ParseTable extends JTable implements MouseListener{
             return msg;
         }
     }
+
+
 
 }
