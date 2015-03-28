@@ -60,6 +60,7 @@ public final class ParsePane extends JPanel {
 
         addBtn.addActionListener(EventHandler.create(ActionListener.class, tParse, "addStudent"));
         clearBtn.addActionListener(EventHandler.create(ActionListener.class, tParse, "clearResults"));
+        openBtn.addActionListener(EventHandler.create(ActionListener.class, tParse, "parseFile"));
 
         topPane.add(addBtn);
         topPane.add(openBtn);

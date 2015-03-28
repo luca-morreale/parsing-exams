@@ -6,6 +6,7 @@ package org.lucamorreale.parsingexams;
 import java.awt.Color;
 import java.awt.EventQueue;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 
 /**
@@ -112,6 +113,40 @@ public final class ParseTable extends JTable{
                 });
             }
         });
+    }
+
+    public void parseFile(){
+
+        if(model.getRowCount() == 0){
+            emptyTableMessage();
+        }
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new CustomFileFilter());
+        if (fileChooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        String[] pattern = new String[model.getRowCount()];
+        for(int i=0; i<model.getRowCount(); i++) {
+            pattern[i] = (String) model.getValueAt(i, 0);
+        }
+        FileParser parser = new FileParser(fileChooser.getSelectedFile(), pattern);
+        String[] results = parser.parseFile();
+
+
+        synchronized(this) {
+            model.removeTableModelListener(this);
+            for(int i=0; i<model.getRowCount(); i++){
+                model.setValueAt(results[i] ,i, 3);
+            }
+            model.addTableModelListener(this);
+        }
+
+    }
+
+    private void emptyTableMessage() {
+
     }
 
 
