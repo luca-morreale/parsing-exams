@@ -5,17 +5,20 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelListener;
 
 /**
  * @author Luca Morreale
  *
  */
-public final class MediaTable extends JTable implements TableModelListener{
+public final class MediaTable extends JTable implements TableModelListener, MouseListener{
     private static final long serialVersionUID = 3012089127775134645L;
 
     private SQLiteManager db;
@@ -127,6 +130,41 @@ public final class MediaTable extends JTable implements TableModelListener{
         });
     }
 
+
+
+    @Override
+    public void mouseReleased(MouseEvent evt) {
+
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            int r = this.rowAtPoint(evt.getPoint());
+
+            if (r >= 0 && r < this.getRowCount()) {
+                this.setRowSelectionInterval(r, r);
+            } else {
+                this.clearSelection();
+            }
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent evt) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent evt) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void mouseExited(MouseEvent evt) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void mousePressed(MouseEvent evt) {
+        // TODO Auto-generated method stub
+    }
 
 
     /**
