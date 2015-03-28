@@ -53,7 +53,7 @@ public final class StudentDialog extends JDialog {
 
 
         this.pack();
-
+        this.setVisible(true);
         this.setLocationRelativeTo(null);
 
         db = new SQLiteManager("jdbc:sqlite:data/source.sqlite");

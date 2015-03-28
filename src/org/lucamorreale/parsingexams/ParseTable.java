@@ -109,21 +109,7 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
         notifyAll();
     }
 
-    public void addStudent(){
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                StudentDialog student = new StudentDialog();
-                student.setVisible(true);
-                student.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosed(java.awt.event.WindowEvent e) {
-                        refresh();
-                    }
-                });
-            }
-        });
-    }
+
 
     public void parseFile(){
 

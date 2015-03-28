@@ -4,6 +4,7 @@
 package org.lucamorreale.parsingexams;
 
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
@@ -58,7 +59,7 @@ public final class ParsePane extends JPanel {
             LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
         }
 
-        addBtn.addActionListener(EventHandler.create(ActionListener.class, tParse, "addStudent"));
+        addBtn.addActionListener(EventHandler.create(ActionListener.class, this, "addStudent"));
         clearBtn.addActionListener(EventHandler.create(ActionListener.class, tParse, "clearResults"));
         openBtn.addActionListener(EventHandler.create(ActionListener.class, tParse, "parseFile"));
 
@@ -75,6 +76,21 @@ public final class ParsePane extends JPanel {
         JScrollPane scroll = new JScrollPane();
         scroll.setViewportView(tParse);
         this.add(scroll, BorderLayout.CENTER);
+    }
+
+    public void addStudent(){
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                StudentDialog student = new StudentDialog();
+                student.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        tParse.refresh();
+                    }
+                });
+            }
+        });
     }
 
 
