@@ -113,22 +113,6 @@ public final class MediaTable extends JTable implements MouseListener{
         notifyAll();
     }
 
-    public void addCourse(){
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                CourseDialog result = new CourseDialog();
-                result.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosed(java.awt.event.WindowEvent e) {
-                        refresh();
-                    }
-
-                });
-            }
-        });
-    }
-
 
 
     @Override

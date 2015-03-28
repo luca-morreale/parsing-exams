@@ -5,6 +5,7 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,7 +67,7 @@ public final class MediaPane extends JPanel implements ActionListener{
             LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
         }
 
-        addBtn.addActionListener(EventHandler.create(ActionListener.class, tMedia, "addCourse"));
+        addBtn.addActionListener(EventHandler.create(ActionListener.class, this, "addCourse"));
 
         topPane.add(addBtn);
         topPane.add(removeBtn);
@@ -92,6 +93,21 @@ public final class MediaPane extends JPanel implements ActionListener{
         panel.add(calculateBtn, BorderLayout.EAST);
 
         this.add(panel, BorderLayout.SOUTH);
+    }
+
+    public void addCourse(){
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                CourseDialog result = new CourseDialog();
+                result.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        tMedia.refresh();
+                    }
+                });
+            }
+        });
     }
 
     @Override
