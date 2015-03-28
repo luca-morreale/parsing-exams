@@ -119,6 +119,7 @@ public final class ParseTable extends JTable{
 
         if(model.getRowCount() == 0){
             emptyTableMessage();
+            return;
         }
 
         JFileChooser fileChooser = new JFileChooser();
@@ -146,7 +147,12 @@ public final class ParseTable extends JTable{
     }
 
     private void emptyTableMessage() {
-
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new EmptyTableDialog();
+            }
+        });
     }
 
 
