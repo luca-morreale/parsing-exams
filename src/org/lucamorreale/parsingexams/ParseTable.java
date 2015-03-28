@@ -178,25 +178,21 @@ public final class ParseTable extends JTable implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent evt) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void mouseEntered(MouseEvent evt) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void mouseExited(MouseEvent evt) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void mousePressed(MouseEvent evt) {
         // TODO Auto-generated method stub
-
     }
 
     /**
