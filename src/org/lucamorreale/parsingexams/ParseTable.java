@@ -5,15 +5,18 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 
 /**
  * @author Luca Morreale
  *
  */
-public final class ParseTable extends JTable{
+public final class ParseTable extends JTable implements MouseListener{
     private static final long serialVersionUID = -9029444808468680306L;
 
     private SQLiteManager db;
@@ -117,7 +120,7 @@ public final class ParseTable extends JTable{
 
     public void parseFile(){
 
-        if(model.getRowCount() == 0){
+        if(model.getRowCount() == 0) {
             emptyTableMessage();
             return;
         }
@@ -158,6 +161,44 @@ public final class ParseTable extends JTable{
 
 
 
+    @Override
+    public void mouseReleased(MouseEvent evt) {
+
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            int r = this.rowAtPoint(evt.getPoint());
+
+            if (r >= 0 && r < this.getRowCount()) {
+                this.setRowSelectionInterval(r, r);
+            } else {
+                this.clearSelection();
+            }
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent evt) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent evt) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent evt) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent evt) {
+        // TODO Auto-generated method stub
+
+    }
+
     /**
      * Enum containing the base information of the table columns
      * @author Luca Morreale
@@ -179,4 +220,5 @@ public final class ParseTable extends JTable{
             return msg;
         }
     }
+
 }
