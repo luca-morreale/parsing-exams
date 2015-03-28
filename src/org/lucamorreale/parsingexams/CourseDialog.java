@@ -32,8 +32,11 @@ public class CourseDialog extends JDialog {
     private SQLiteManager db;
 
     public CourseDialog(){
-
+        super();
         this.setLayout(new BorderLayout(0, 0));
+        this.setAlwaysOnTop(true);
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        this.setTitle("Aggiungi Corso");
 
         saveButton = new JButton("Aggiungi Esito");
         generateButtonPane();
