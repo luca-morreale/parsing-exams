@@ -5,6 +5,8 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
@@ -17,11 +19,14 @@ import javax.swing.SwingUtilities;
  * @author Luca Morreale
  *
  */
-public final class MediaTable extends JTable implements MouseListener{
+public final class MediaTable extends JTable implements MouseListener, ActionListener{
     private static final long serialVersionUID = 3012089127775134645L;
 
     private SQLiteManager db;
     private KeyTableModel model;
+    private TablePopupMenu popupMenu;
+
+    private static final String DB_TABLE = "media";
 
     public MediaTable(){
         super();
@@ -32,6 +37,10 @@ public final class MediaTable extends JTable implements MouseListener{
         }
         model.setColumnsClass(Column.TYPE);
         model.addTableModelListener(this);
+
+        popupMenu = new TablePopupMenu(this);
+        this.setComponentPopupMenu(popupMenu);
+        this.setInheritsPopupMenu(true);
 
         this.setModel(this.model);
         this.setColumnWidth();
@@ -89,7 +98,7 @@ public final class MediaTable extends JTable implements MouseListener{
             return;
         }
 
-        db.selectQuery("media", null, "*", "ORDER BY corso");
+        db.selectQuery(DB_TABLE, null, "*", "ORDER BY corso");
 
         model.removeTableModelListener(this);
 
@@ -114,6 +123,20 @@ public final class MediaTable extends JTable implements MouseListener{
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        model.removeTableModelListener(this);
+
+        int row = this.convertRowIndexToModel(this.getSelectedRow());
+        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
+        model.removeRow(row);
+
+        db.deleteQuery(DB_TABLE, new String[][]{
+                {"id", id+""}
+        });
+        model.addTableModelListener(this);
+
+    }
 
     @Override
     public void mouseReleased(MouseEvent evt) {
@@ -171,5 +194,6 @@ public final class MediaTable extends JTable implements MouseListener{
             return msg;
         }
     }
+
 
 }
