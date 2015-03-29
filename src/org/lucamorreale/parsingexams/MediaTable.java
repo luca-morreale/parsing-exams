@@ -72,6 +72,7 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
     public synchronized String getMedia(){
 
         if(this.getRowCount() == 0){
+            emptyTableMessage();
             return "";
         }
 
@@ -122,19 +123,34 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
         notifyAll();
     }
 
+    private void emptyTableMessage() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new EmptyTableDialog();
+            }
+        });
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent evt) {
-        model.removeTableModelListener(this);
 
         int row = this.convertRowIndexToModel(this.getSelectedRow());
-        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
-        model.removeRow(row);
+        if(row < 0){
+            emptyTableMessage();
+            return;
+        }
 
-        db.deleteQuery(DB_TABLE, new String[][]{
-                {"id", id+""}
-        });
-        model.addTableModelListener(this);
+        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
+        synchronized(this) {
+            model.removeTableModelListener(this);
+            model.removeRow(row);
+            model.addTableModelListener(this);
+            db.deleteQuery(DB_TABLE, new String[][]{
+                    {"id", id+""}
+            });
+        }
 
     }
 
