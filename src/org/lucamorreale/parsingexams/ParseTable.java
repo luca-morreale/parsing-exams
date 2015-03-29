@@ -25,6 +25,8 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
     private KeyTableModel model;
     private TablePopupMenu popupMenu;
 
+    private static final String DB_TABLE = "parse";
+
     public ParseTable(){
         super();
 
@@ -85,7 +87,7 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
             return;
         }
 
-        db.selectQuery("parse", null, "*", "ORDER BY nome");
+        db.selectQuery(DB_TABLE, null, "*", "ORDER BY nome");
 
         model.removeTableModelListener(this);
 
@@ -152,7 +154,18 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
+
+        model.removeTableModelListener(this);
+
+        int row = this.convertRowIndexToModel(this.getSelectedRow());
+        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
+
+        model.removeRow(row);
+        db.deleteQuery(DB_TABLE, new String[][]{
+                {"id", id+""}
+        });
+
+        model.addTableModelListener(this);
     }
 
 
@@ -193,7 +206,6 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
     /**
      * Enum containing the base information of the table columns
      * @author Luca Morreale
-     *
      */
     private enum Column{
         MATRICOLA("Matricola"), NOME("Nome"), COGNOME("Cognome"), ESITO("Esito");
