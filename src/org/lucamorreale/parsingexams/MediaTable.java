@@ -14,6 +14,7 @@ import java.math.RoundingMode;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
 
 /**
  * @author Luca Morreale
@@ -130,6 +131,33 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
                 new EmptyTableDialog();
             }
         });
+    }
+
+    public void tableModelChanged(TableModelEvent evt){
+
+        String[] fields = new String[3];
+        for(int i = 0; i < 3;i++) {
+            fields[i] = this.getColumnName(i).toLowerCase();
+        }
+        int row = getSelectedModelRow();
+        int id = getSelectedId();
+        String[][] set = new String[3][2];
+        for(int i = 0; i < 3; i++){
+            set[i][0] = fields[i];
+            set[i][1] = this.getValueAt(row, i).toString();
+        }
+        db.updateQuery(DB_TABLE, set, "id = " + id);
+
+    }
+
+    private int getSelectedId(){
+        int row = getSelectedModelRow();
+        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
+        return id;
+    }
+
+    private int getSelectedModelRow(){
+        return this.convertRowIndexToModel(this.getSelectedRow());
     }
 
 

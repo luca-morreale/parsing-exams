@@ -13,12 +13,14 @@ import java.awt.event.MouseListener;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 /**
  * @author Luca Morreale
  *
  */
-public final class ParseTable extends JTable implements MouseListener, ActionListener{
+public final class ParseTable extends JTable implements MouseListener, ActionListener, TableModelListener{
     private static final long serialVersionUID = -9029444808468680306L;
 
     private SQLiteManager db;
@@ -111,6 +113,22 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
         notifyAll();
     }
 
+    public void tableModelChanged(TableModelEvent evt){
+
+        String[] fields = new String[3];
+        for(int i = 0; i < 3;i++) {
+            fields[i] = this.getColumnName(i).toLowerCase();
+        }
+        int row = getSelectedModelRow();
+        int id = getSelectedId();
+        String[][] set = new String[3][2];
+        for(int i = 0; i < 3; i++){
+            set[i][0] = fields[i];
+            set[i][1] = this.getValueAt(row, i).toString();
+        }
+        db.updateQuery(DB_TABLE, set, "id = " + id);
+
+    }
 
 
     public void parseFile(){
@@ -152,14 +170,23 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
         });
     }
 
+    private int getSelectedId(){
+        int row = getSelectedModelRow();
+        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
+        return id;
+    }
+
+    private int getSelectedModelRow(){
+        return this.convertRowIndexToModel(this.getSelectedRow());
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        int id = getSelectedId();
+        int row = getSelectedModelRow();
+
         model.removeTableModelListener(this);
-
-        int row = this.convertRowIndexToModel(this.getSelectedRow());
-        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
-
         model.removeRow(row);
         db.deleteQuery(DB_TABLE, new String[][]{
                 {"id", id+""}
