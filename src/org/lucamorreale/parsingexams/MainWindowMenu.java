@@ -24,7 +24,6 @@ public final class MainWindowMenu extends JMenuBar{
         this.actionToCall = listenerToCall;
 
         buildFile();
-        buildHelp();
     }
 
     private void buildFile(){
@@ -38,21 +37,6 @@ public final class MainWindowMenu extends JMenuBar{
 
         this.add(mFile);
 
-    }
-
-    private void buildHelp(){
-        JMenu mHelp = new JMenu("Help");
-        JMenuItem itemBug = new JMenuItem("Bug");
-
-        itemBug.addActionListener(EventHandler.create(ActionListener.class, this, "startBugDialog"));    // at row
-        mHelp.add(itemBug);
-
-        this.add(mHelp);
-    }
-
-    @SuppressWarnings("unused")
-    private void starBugDialog() {
-        //start a dialog specifying where to notify a bug
     }
 
 
