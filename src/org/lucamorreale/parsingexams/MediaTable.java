@@ -27,7 +27,7 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
     private KeyTableModel model;
     private TablePopupMenu popupMenu;
 
-    private static final String DB_TABLE = "media";
+    public static final String DB_TABLE = "media";
 
     public MediaTable(){
         super();
