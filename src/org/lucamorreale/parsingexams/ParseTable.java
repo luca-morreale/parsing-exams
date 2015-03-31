@@ -27,7 +27,7 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
     private KeyTableModel model;
     private TablePopupMenu popupMenu;
 
-    private static final String DB_TABLE = "parse";
+    public static final String DB_TABLE = "parse";
 
     public ParseTable(){
         super();

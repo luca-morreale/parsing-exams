@@ -31,14 +31,16 @@ public final class StudentDialog extends JDialog {
     private JIntField matricolaTextField;
     private JLetterField cognomeTextField;
 
+    private final String DB_TABLE;
 
-    public StudentDialog() {
+    public StudentDialog(String db_table) {
         super();
         this.setAlwaysOnTop(true);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setTitle("Aggiungi Matricola");
         this.setLayout(new BorderLayout(0, 0));
 
+        DB_TABLE = db_table;
 
         saveButton = new JButton("Salva");
         cancelButton = new JButton("Cancel");
@@ -133,7 +135,7 @@ public final class StudentDialog extends JDialog {
     }
 
     public void saveStudent() {
-        db.insertQuery("parse", new String[][]{
+        db.insertQuery(DB_TABLE, new String[][]{
                         {"matricola", matricolaTextField.getText()},
                         {"nome", nomeTextField.getText()},
                         {"cognome", cognomeTextField.getText()},
