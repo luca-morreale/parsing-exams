@@ -54,6 +54,8 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
             }
         });
 
+        refresh();
+
     }
 
     private void setColumnWidth(){
