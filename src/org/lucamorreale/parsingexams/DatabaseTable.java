@@ -136,8 +136,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
     }
 
     abstract void emptyTableError();
-
-
+    abstract void addRow();
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -148,9 +147,8 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         } else if(e.getSource() == ACTION.UPDATE) {
             tableChanged(new TableModelEvent(model));
         } else if(e.getSource() == ACTION.ADD) {
-
+            addRow();
         }
-
     }
 
     @Override
