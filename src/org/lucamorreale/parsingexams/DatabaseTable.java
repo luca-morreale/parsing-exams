@@ -45,6 +45,7 @@ public class DatabaseTable extends JTable {
         });
 
     }
+
     private void init(){
         model.addTableModelListener(this);
         this.setComponentPopupMenu(popupMenu);
@@ -52,6 +53,16 @@ public class DatabaseTable extends JTable {
 
         this.setModel(this.model);
         this.setBackground(Color.WHITE);
+    }
+
+    protected int getSelectedId(){
+        int row = getSelectedModelRow();
+        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
+        return id;
+    }
+
+    protected int getSelectedModelRow(){
+        return this.convertRowIndexToModel(this.getSelectedRow());
     }
 
 }
