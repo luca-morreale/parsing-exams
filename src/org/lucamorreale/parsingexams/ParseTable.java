@@ -51,10 +51,11 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
             @Override
             public void run() {
                 db = new SQLiteManager("jdbc:sqlite:data/source.sqlite");
+                refresh();
             }
         });
 
-        refresh();
+
 
     }
 
