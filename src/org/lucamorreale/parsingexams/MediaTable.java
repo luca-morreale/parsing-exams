@@ -15,6 +15,7 @@ import java.math.RoundingMode;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Luca Morreale
@@ -136,7 +137,15 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
         });
     }
 
-    public void tableModelChanged(TableModelEvent evt){
+    @Override
+    public void tableChanged(TableModelEvent evt){
+
+        ((DefaultTableModel) evt.getSource()).removeTableModelListener(this);
+
+        super.tableChanged(evt);
+        if (evt == null || (evt.getFirstRow() == TableModelEvent.HEADER_ROW)) {
+            return;
+        }
 
         String[] fields = new String[3];
         for(int i = 0; i < 3;i++) {
@@ -151,6 +160,7 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
         }
         db.updateQuery(DB_TABLE, set, "id = " + id);
 
+        ((DefaultTableModel) evt.getSource()).addTableModelListener(this);
     }
 
     private int getSelectedId(){
