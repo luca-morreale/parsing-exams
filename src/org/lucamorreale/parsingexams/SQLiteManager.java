@@ -330,7 +330,28 @@ public final class SQLiteManager {
         }
     }
 
+    /**
+     * Iterate over all column selected and return an array of Object
+     * containing the data of the current row.
+     * @return
+     */
+    public Object[] getRowArray(){
 
+        try {
+
+            int colNumber = rs.getMetaData().getColumnCount();
+            Object[] row = new Object[colNumber];
+            for(int i=0; i<colNumber; i++){
+                row[i] = getField(i);
+            }
+            return row;
+
+        } catch (SQLException e) {
+            LOG.severe(e.getMessage() + " getRowArray()");
+            return null;
+        }
+
+    }
 
     /**
      *
