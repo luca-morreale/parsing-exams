@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -77,16 +78,6 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         return this.convertRowIndexToModel(this.getSelectedRow());
     }
 
-    protected void updateTable(String[] fields){
-
-        Object[] values = new Object[fields.length];
-        for(int i = 0;i < values.length; i++) {
-            values[i] = db.getField(fields[i]);
-        }
-
-        model.addRow(values, db.getField("id"));
-    }
-
     protected String[] getUpdateFields(){
 
         String fields[] = new String[4];
@@ -106,10 +97,10 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
 
         model.removeTableModelListener(this);
 
-        String fields[] = getUpdateFields();
         while(db.hasNext()){
             if(!model.existsKey(db.getField("id"))){
-                updateTable(fields);
+                Object[] values = Arrays.copyOfRange(db.getRowArray(), 1, db.getColumnsCount());
+                model.addRow(values, db.getField("id"));
             }
         }
         model.addTableModelListener(this);
