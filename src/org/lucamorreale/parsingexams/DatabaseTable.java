@@ -5,6 +5,8 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -16,7 +18,7 @@ import javax.swing.SwingUtilities;
  * @author Luca Morreale
  *
  */
-public class DatabaseTable extends JTable implements MouseListener{
+public class DatabaseTable extends JTable implements MouseListener, ActionListener{
     private static final long serialVersionUID = -6102001466807223180L;
 
     private SQLiteManager db;
@@ -72,6 +74,12 @@ public class DatabaseTable extends JTable implements MouseListener{
     protected int getSelectedModelRow(){
         return this.convertRowIndexToModel(this.getSelectedRow());
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
 
     public synchronized void refershTable(){
         if(!db.isConnected()) {
@@ -138,6 +146,8 @@ public class DatabaseTable extends JTable implements MouseListener{
 
     @Override
     public void mousePressed(MouseEvent evt) { } // TODO Auto-generated method stub
+
+
 
 
 }
