@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
 
 /**
  * @author Luca Morreale
@@ -114,8 +115,6 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         notifyAll();
     }
 
-
-
     protected void deleteRow(){
 
         if(this.getRowCount() == 0){
@@ -147,7 +146,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         } else if(e.getSource() == ACTION.LOAD) {
             refershTable();
         } else if(e.getSource() == ACTION.UPDATE) {
-
+            tableChanged(new TableModelEvent(model));
         } else if(e.getSource() == ACTION.ADD) {
 
         }
