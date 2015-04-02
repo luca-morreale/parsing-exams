@@ -26,6 +26,8 @@ public class DatabaseTable extends JTable implements MouseListener{
     private final String DB_TABLE;
     private final List<String> Columns;
 
+    public static enum ACTION {UPDATE, DELETE, ADD, LOAD};
+
     public DatabaseTable(List<String> columns, String db_table){
         super();
 
@@ -69,6 +71,46 @@ public class DatabaseTable extends JTable implements MouseListener{
 
     protected int getSelectedModelRow(){
         return this.convertRowIndexToModel(this.getSelectedRow());
+    }
+
+    public synchronized void refershTable(){
+        if(!db.isConnected()) {
+            return;
+        }
+
+        db.selectQuery(DB_TABLE, null, "*", "ORDER BY nome");
+
+        model.removeTableModelListener(this);
+
+        String fields[] = getUpdateFields();
+        while(db.hasNext()){
+            if(!model.existsKey(db.getField("id"))){
+                updateTable(fields);
+            }
+        }
+
+        model.addTableModelListener(this);
+        notifyAll();
+    }
+
+    protected void updateTable(String[] fields){
+
+        Object[] values = new Object[fields.length];
+        for(int i = 0;i < values.length; i++) {
+            values[i] = db.getField(fields[i]);
+        }
+
+        model.addRow(values, db.getField("id"));
+    }
+
+    protected String[] getUpdateFields(){
+
+        String fields[] = new String[4];
+        int i = 0;
+        for (String c : Columns) {
+            fields[i++] = c.toLowerCase();
+        }
+        return fields;
     }
 
     @Override
