@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Luca Morreale
@@ -149,6 +150,30 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         } else if(e.getSource() == ACTION.ADD) {
             addRow();
         }
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent evt){
+
+        ((DefaultTableModel) evt.getSource()).removeTableModelListener(this);
+
+        super.tableChanged(evt);
+        if (evt == null || (evt.getFirstRow() == TableModelEvent.HEADER_ROW)) {
+            return;
+        }
+
+        String[] fields = getUpdateFields();
+        int row = getSelectedModelRow();
+        int id = getSelectedId();
+        String[][] set = new String[3][2];
+        for(int i = 0; i < 3; i++){
+            set[i][0] = fields[i];
+            set[i][1] = this.getValueAt(row, i).toString();
+        }
+        db.updateQuery(DB_TABLE, set, "id = " + id);
+
+        ((DefaultTableModel) evt.getSource()).addTableModelListener(this);
+
     }
 
     @Override
