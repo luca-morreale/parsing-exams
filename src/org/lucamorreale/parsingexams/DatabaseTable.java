@@ -18,7 +18,7 @@ import javax.swing.SwingUtilities;
  * @author Luca Morreale
  *
  */
-public class DatabaseTable extends JTable implements MouseListener, ActionListener{
+public abstract class DatabaseTable extends JTable implements MouseListener, ActionListener{
     private static final long serialVersionUID = -6102001466807223180L;
 
     private SQLiteManager db;
@@ -75,32 +75,6 @@ public class DatabaseTable extends JTable implements MouseListener, ActionListen
         return this.convertRowIndexToModel(this.getSelectedRow());
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
-
-    public synchronized void refershTable(){
-        if(!db.isConnected()) {
-            return;
-        }
-
-        db.selectQuery(DB_TABLE, null, "*", "ORDER BY nome");
-
-        model.removeTableModelListener(this);
-
-        String fields[] = getUpdateFields();
-        while(db.hasNext()){
-            if(!model.existsKey(db.getField("id"))){
-                updateTable(fields);
-            }
-        }
-
-        model.addTableModelListener(this);
-        notifyAll();
-    }
-
     protected void updateTable(String[] fields){
 
         Object[] values = new Object[fields.length];
@@ -119,6 +93,65 @@ public class DatabaseTable extends JTable implements MouseListener, ActionListen
             fields[i++] = c.toLowerCase();
         }
         return fields;
+    }
+
+    public synchronized void refershTable(){
+        if(!db.isConnected()) {
+            return;
+        }
+
+        db.selectQuery(DB_TABLE, null, "*", "ORDER BY nome");
+
+        model.removeTableModelListener(this);
+
+        String fields[] = getUpdateFields();
+        while(db.hasNext()){
+            if(!model.existsKey(db.getField("id"))){
+                updateTable(fields);
+            }
+        }
+        model.addTableModelListener(this);
+        notifyAll();
+    }
+
+
+
+    protected void deleteRow(){
+
+        if(this.getRowCount() == 0){
+            emptyTableError();
+        }
+        int id = getSelectedId();
+        int row = getSelectedModelRow();
+
+        synchronized(this){
+            model.removeTableModelListener(this);
+
+            model.removeRow(row);
+            db.deleteQuery(DB_TABLE, new String[][]{
+                    {"id", id+""}
+            });
+
+            model.addTableModelListener(this);
+        }
+    }
+
+    abstract void emptyTableError();
+
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == ACTION.DELETE){
+            deleteRow();
+        } else if(e.getSource() == ACTION.LOAD) {
+            refershTable();
+        } else if(e.getSource() == ACTION.UPDATE) {
+
+        } else if(e.getSource() == ACTION.ADD) {
+
+        }
+
     }
 
     @Override
