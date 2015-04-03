@@ -93,7 +93,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             return;
         }
 
-        db.selectQuery(DB_TABLE, null, "*", "ORDER BY nome");
+        db.selectQuery(DB_TABLE, null, "*");
 
         model.removeTableModelListener(this);
 
