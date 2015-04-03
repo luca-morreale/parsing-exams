@@ -56,6 +56,11 @@ public final class ParseTable extends DatabaseTable {
 
     public synchronized void clearResults(){
 
+        if(model.getRowCount() == 0) {
+            emptyTableError();
+            return;
+        }
+
         model.removeTableModelListener(this);
         for(int i=0; i<model.getRowCount(); i++){
             this.setValueAt("", i, 3);
