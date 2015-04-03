@@ -111,6 +111,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
 
         if(this.getRowCount() == 0){
             emptyTableError();
+            return;
         }
         int id = getSelectedId();
         int row = getSelectedModelRow();
