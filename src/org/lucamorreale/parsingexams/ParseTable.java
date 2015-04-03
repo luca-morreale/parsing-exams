@@ -55,12 +55,12 @@ public final class ParseTable extends DatabaseTable {
     }
 
     public synchronized void clearResults(){
-        
+
         if(model.getRowCount() == 0) {
             emptyTableError();
             return;
         }
-        
+
         model.removeTableModelListener(this);
         for(int i=0; i<model.getRowCount(); i++){
             this.setValueAt("", i, 3);
@@ -120,7 +120,7 @@ public final class ParseTable extends DatabaseTable {
                 student.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosed(java.awt.event.WindowEvent e) {
-                        refershTable();
+                        refreshTable();
                     }
                 });
             }

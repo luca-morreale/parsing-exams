@@ -88,7 +88,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         return fields;
     }
 
-    public synchronized void refershTable(){
+    public synchronized void refreshTable(){
         if(!db.isConnected()) {
             return;
         }
@@ -158,7 +158,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         if(e.getSource() == ACTION.DELETE){
             deleteRow();
         } else if(e.getSource() == ACTION.LOAD) {
-            refershTable();
+            refreshTable();
         } else if(e.getSource() == ACTION.UPDATE) {
             updateTable(new TableModelEvent(model));
         } else if(e.getSource() == ACTION.ADD) {
