@@ -78,9 +78,9 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         return this.convertRowIndexToModel(this.getSelectedRow());
     }
 
-    protected String[] getUpdateFields(){
+    protected String[] getFields(){
 
-        String fields[] = new String[4];
+        String fields[] = new String[Columns.size()];
         int i = 0;
         for (String c : Columns) {
             fields[i++] = c.toLowerCase();
@@ -153,7 +153,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             return;
         }
 
-        String[] fields = getUpdateFields();
+        String[] fields = getFields();
         int row = getSelectedModelRow();
         int id = getSelectedId();
         String[][] set = new String[3][2];
