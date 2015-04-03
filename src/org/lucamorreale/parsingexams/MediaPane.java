@@ -69,6 +69,7 @@ public final class MediaPane extends JPanel implements ActionListener{
 
         addBtn.addActionListener(EventHandler.create(ActionListener.class, this, "addCourse"));
         removeBtn.addActionListener(tMedia);
+        exportBtn.addActionListener(EventHandler.create(ActionListener.class, this, "esporta"));
 
         topPane.add(addBtn);
         topPane.add(removeBtn);

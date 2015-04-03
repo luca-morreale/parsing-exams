@@ -9,12 +9,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.logging.Logger;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -137,6 +142,43 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
         });
     }
 
+    public void esporta(){
+
+        if(model.getRowCount() == 0) {
+            emptyTableMessage();
+            return;
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+        chooser.setFileFilter(filter);
+
+        int returnVal = chooser.showSaveDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            try {
+
+                PrintStream outStream = new PrintStream(chooser.getSelectedFile() + ".txt");
+                for(int row = 0; row < this.getRowCount(); row++) {
+                    String data = "";
+                    for(int col = 0; col < this.getColumnCount(); col++) {
+                        Object cell = this.getValueAt(row, col);
+                        if (cell != null) {
+                            data += cell.toString() + "\t";
+                        }
+                        data += "\t";
+                    }
+                    outStream.println(data);
+                }
+
+                outStream.close();
+            } catch (IOException e) {
+                LOG.severe(e.getMessage() + " esporta()");
+            }
+        }
+
+    }
+
     @Override
     public void tableChanged(TableModelEvent evt){
 
@@ -251,4 +293,6 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
             return msg;
         }
     }
+
+    private static final Logger LOG = Logger.getLogger(MediaTable.class.getName());
 }
