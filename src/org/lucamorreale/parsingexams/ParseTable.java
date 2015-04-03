@@ -9,12 +9,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -142,6 +146,33 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
 
     }
 
+    public void esporta(){
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+        chooser.setFileFilter(filter);
+
+        int returnVal = chooser.showSaveDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            try {
+
+                PrintStream outStream = new PrintStream(chooser.getSelectedFile() + ".txt");
+                for(int row = 0; row < this.getRowCount(); row++) {
+                    String data = "";
+                    for(int col = 0; col < this.getColumnCount(); col++) {
+                        data += this.getValueAt(row, col).toString() + "\t";
+                    }
+                    outStream.println(data);
+                }
+
+                outStream.close();
+            } catch (IOException e) {
+                LOG.severe(e.getMessage() + " esporta()");
+            }
+        }
+
+    }
+
 
     public void parseFile(){
 
@@ -263,6 +294,6 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
         }
     }
 
-
+    private static final Logger LOG = Logger.getLogger(ParseTable.class.getName());
 
 }
