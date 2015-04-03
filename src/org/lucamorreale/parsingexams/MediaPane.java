@@ -96,10 +96,9 @@ public final class MediaPane extends JPanel implements ActionListener{
     }
 
     private void calculateAverage(){
-        if(tMedia.getRowCount() == 0){
-            return;
-        } else {
-            mediaLabel.setText("Media Pesata: " + tMedia.getMedia());
+        String out = tMedia.getMedia();
+        if(tMedia.getRowCount() > 0){
+            mediaLabel.setText("Media Pesata: " + out);
         }
     }
 
