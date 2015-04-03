@@ -32,8 +32,11 @@ public class TablePopupMenu extends JPopupMenu implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent evt) {
-        actionToCall.actionPerformed(evt);
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == deleteItm){
+            e.setSource(DatabaseTable.ACTION.DELETE);
+        }
+        actionToCall.actionPerformed(e);
     }
 
 
