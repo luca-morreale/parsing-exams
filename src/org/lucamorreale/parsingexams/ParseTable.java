@@ -147,6 +147,12 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
     }
 
     public void esporta(){
+
+        if(model.getRowCount() == 0) {
+            emptyTableMessage();
+            return;
+        }
+
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
         chooser.setFileFilter(filter);
@@ -160,7 +166,11 @@ public final class ParseTable extends JTable implements MouseListener, ActionLis
                 for(int row = 0; row < this.getRowCount(); row++) {
                     String data = "";
                     for(int col = 0; col < this.getColumnCount(); col++) {
-                        data += this.getValueAt(row, col).toString() + "\t";
+                        Object cell = this.getValueAt(row, col);
+                        if (cell != null) {
+                            data += cell.toString() + "\t";
+                        }
+                        data += "\t";
                     }
                     outStream.println(data);
                 }
