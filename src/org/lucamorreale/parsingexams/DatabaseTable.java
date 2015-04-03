@@ -127,25 +127,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         }
     }
 
-    abstract void emptyTableError();
-    abstract void addRow();
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == ACTION.DELETE){
-            deleteRow();
-        } else if(e.getSource() == ACTION.LOAD) {
-            refershTable();
-        } else if(e.getSource() == ACTION.UPDATE) {
-            tableChanged(new TableModelEvent(model));
-        } else if(e.getSource() == ACTION.ADD) {
-            addRow();
-        }
-    }
-
-    @Override
-    public void tableChanged(TableModelEvent evt){
-
+    protected synchronized void updateTable(TableModelEvent evt){
         ((DefaultTableModel) evt.getSource()).removeTableModelListener(this);
 
         super.tableChanged(evt);
@@ -164,7 +146,28 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         db.updateQuery(DB_TABLE, set, "id = " + id);
 
         ((DefaultTableModel) evt.getSource()).addTableModelListener(this);
+        notifyAll();
+    }
 
+    abstract void emptyTableError();
+    abstract void addRow();
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == ACTION.DELETE){
+            deleteRow();
+        } else if(e.getSource() == ACTION.LOAD) {
+            refershTable();
+        } else if(e.getSource() == ACTION.UPDATE) {
+            updateTable(new TableModelEvent(model));
+        } else if(e.getSource() == ACTION.ADD) {
+            addRow();
+        }
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent evt){
+        updateTable(evt);
     }
 
     @Override
