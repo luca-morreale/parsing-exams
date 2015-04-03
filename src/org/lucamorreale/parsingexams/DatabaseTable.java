@@ -31,7 +31,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
     private final String DB_TABLE;
     private final List<String> Columns;
 
-    public static enum ACTION {UPDATE, DELETE, ADD, LOAD};
+    public static enum ACTION {UPDATE, DELETE, ADD, LOAD, SAVE};
 
     public DatabaseTable(List<String> columns, String db_table){
         super();
@@ -138,8 +138,8 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         String[] fields = getFields();
         int row = getSelectedModelRow();
         int id = getSelectedId();
-        String[][] set = new String[3][2];
-        for(int i = 0; i < 3; i++){
+        String[][] set = new String[fields.length][2];
+        for(int i = 0; i < fields.length; i++){
             set[i][0] = fields[i];
             set[i][1] = this.getValueAt(row, i).toString();
         }
@@ -151,6 +151,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
 
     abstract void emptyTableError();
     abstract void addRow();
+    abstract void saveTable();
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -162,6 +163,8 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             updateTable(new TableModelEvent(model));
         } else if(e.getSource() == ACTION.ADD) {
             addRow();
+        } else if(e.getSource() == ACTION.SAVE) {
+            saveTable();
         }
     }
 
