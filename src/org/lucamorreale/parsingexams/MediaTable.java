@@ -86,9 +86,11 @@ public final class MediaTable extends DatabaseTable {
         });
     }
 
+    @Override
+    protected void saveTable() {
+        // TODO Auto-generated method stub
 
-
-
+    }
 
     @Override
     public void actionPerformed(ActionEvent evt) {
@@ -97,13 +99,4 @@ public final class MediaTable extends DatabaseTable {
     }
 
 
-
-
-
-
-    @Override
-    void saveTable() {
-        // TODO Auto-generated method stub
-
-    }
 }
