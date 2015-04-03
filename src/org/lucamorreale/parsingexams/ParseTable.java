@@ -4,6 +4,7 @@
 package org.lucamorreale.parsingexams;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ public final class ParseTable extends DatabaseTable {
 
 
     public static final String DB_TABLE = "parse";
+    public static enum OPERATION {CLEAR, OPEN};
 
     public ParseTable(){
         super(Arrays.asList("Matricola", "Nome", "Cognome", "Esito"), DB_TABLE);
@@ -41,6 +43,17 @@ public final class ParseTable extends DatabaseTable {
 
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        super.actionPerformed(e);
+        if(e.getSource() == OPERATION.CLEAR) {
+            clearResults();
+        } else if(e.getSource() == OPERATION.OPEN) {
+            parseFile();
+        }
+
+    }
+
     public synchronized void clearResults(){
 
         model.removeTableModelListener(this);
@@ -49,7 +62,6 @@ public final class ParseTable extends DatabaseTable {
         }
 
         model.addTableModelListener(this);
-
         notifyAll();
     }
 
