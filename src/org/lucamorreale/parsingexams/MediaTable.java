@@ -3,69 +3,28 @@
  */
 package org.lucamorreale.parsingexams;
 
-import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.event.TableModelEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Luca Morreale
  *
  */
-public final class MediaTable extends JTable implements MouseListener, ActionListener{
+public final class MediaTable extends DatabaseTable {
     private static final long serialVersionUID = 3012089127775134645L;
-
-    private SQLiteManager db;
-    private KeyTableModel model;
-    private TablePopupMenu popupMenu;
 
     public static final String DB_TABLE = "media";
 
     public MediaTable(){
-        super();
-
-        this.model = new KeyTableModel();
-        for (Column c : Column.values()) {
-            model.addColumn(c);
-        }
-        model.setColumnsClass(Column.TYPE);
-        model.addTableModelListener(this);
-
-        popupMenu = new TablePopupMenu(this);
-        this.setComponentPopupMenu(popupMenu);
-        this.setInheritsPopupMenu(true);
-
-        this.setModel(this.model);
-        this.setColumnWidth();
-        this.setBackground(Color.WHITE);
-
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                db = new SQLiteManager("jdbc:sqlite:data/source.sqlite");
-                refresh();
-            }
-        });
-
-
-
-    }
-
-    private void setColumnWidth(){
+        super(Arrays.asList("Corso", "Esito", "Crediti"), DB_TABLE);
 
         this.getColumnModel().getColumn(0).setPreferredWidth(200);
         this.getColumnModel().getColumn(0).setMinWidth(75);
@@ -77,12 +36,14 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
         this.getColumnModel().getColumn(2).setMaxWidth(200);
 
         this.getTableHeader().setReorderingAllowed(false);
+
     }
+
 
     public synchronized String getMedia(){
 
         if(this.getRowCount() == 0){
-            emptyTableMessage();
+            emptyTableError();
             return "";
         }
 
@@ -104,36 +65,8 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
     }
 
 
-    public synchronized void refresh(){
-        if(!db.isConnected()) {
-            return;
-        }
-
-        db.selectQuery(DB_TABLE, null, "*", "ORDER BY corso");
-
-        model.removeTableModelListener(this);
-
-        String fields[] = new String[3];
-        int i = 0;
-        for (Column c : Column.values()) {
-            fields[i++] = c.toString().toLowerCase();
-        }
-
-        Object[] values = new Object[fields.length];
-        while(db.hasNext()){
-            if(!model.existsKey(db.getField("id"))){
-                for(i = 0;i < fields.length; i++) {
-                    values[i] = db.getField(fields[i]);
-                }
-                model.addRow(values, db.getField("id"));
-            }
-        }
-
-        model.addTableModelListener(this);
-        notifyAll();
-    }
-
-    private void emptyTableMessage() {
+    @Override
+    protected void emptyTableError() {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -142,10 +75,11 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
         });
     }
 
-    public void esporta(){
+    @Override
+    protected void saveTable() {
 
         if(model.getRowCount() == 0) {
-            emptyTableMessage();
+            emptyTableError();
             return;
         }
 
@@ -155,10 +89,13 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
 
         int returnVal = chooser.showSaveDialog(this);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION){
+        if (returnVal != JFileChooser.APPROVE_OPTION){
+            return;
+        }
+        synchronized(this){
             try {
 
-                PrintStream outStream = new PrintStream(chooser.getSelectedFile() + ".txt");
+                PrintStream outStream = new PrintStream(getFileName(chooser));
                 for(int row = 0; row < this.getRowCount(); row++) {
                     String data = "";
                     for(int col = 0; col < this.getColumnCount(); col++) {
@@ -176,123 +113,33 @@ public final class MediaTable extends JTable implements MouseListener, ActionLis
                 LOG.severe(e.getMessage() + " esporta()");
             }
         }
+    }
 
+    private String getFileName(JFileChooser chooser){
+        String file = chooser.getSelectedFile().toString();
+        if( file.endsWith(".txt") || file.endsWith(".text")){
+            return file;
+        } else {
+            return file + ".txt";
+        }
     }
 
     @Override
-    public void tableChanged(TableModelEvent evt){
-
-        ((DefaultTableModel) evt.getSource()).removeTableModelListener(this);
-
-        super.tableChanged(evt);
-        if (evt == null || (evt.getFirstRow() == TableModelEvent.HEADER_ROW)) {
-            return;
-        }
-
-        String[] fields = new String[3];
-        for(int i = 0; i < 3;i++) {
-            fields[i] = this.getColumnName(i).toLowerCase();
-        }
-        int row = getSelectedModelRow();
-        int id = getSelectedId();
-        String[][] set = new String[3][2];
-        for(int i = 0; i < 3; i++){
-            set[i][0] = fields[i];
-            set[i][1] = this.getValueAt(row, i).toString();
-        }
-        db.updateQuery(DB_TABLE, set, "id = " + id);
-
-        ((DefaultTableModel) evt.getSource()).addTableModelListener(this);
-    }
-
-    private int getSelectedId(){
-        int row = getSelectedModelRow();
-        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
-        return id;
-    }
-
-    private int getSelectedModelRow(){
-        return this.convertRowIndexToModel(this.getSelectedRow());
-    }
-
-
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-
-        int row = this.convertRowIndexToModel(this.getSelectedRow());
-        if(row < 0){
-            emptyTableMessage();
-            return;
-        }
-
-        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
-        synchronized(this) {
-            model.removeTableModelListener(this);
-            model.removeRow(row);
-            model.addTableModelListener(this);
-            db.deleteQuery(DB_TABLE, new String[][]{
-                    {"id", id+""}
-            });
-        }
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent evt) {
-
-        if (SwingUtilities.isRightMouseButton(evt)) {
-            int r = this.rowAtPoint(evt.getPoint());
-
-            if (r >= 0 && r < this.getRowCount()) {
-                this.setRowSelectionInterval(r, r);
-            } else {
-                this.clearSelection();
+    protected void addRow() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                CourseDialog result = new CourseDialog(MediaTable.DB_TABLE);
+                result.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        refreshTable();
+                    }
+                });
             }
-        }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent evt) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent evt) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void mouseExited(MouseEvent evt) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void mousePressed(MouseEvent evt) {
-        // TODO Auto-generated method stub
-    }
-
-
-    /**
-     * Enum containing the base information of the table columns
-     * @author Luca Morreale
-     *
-     */
-    private enum Column{
-        CORSO("Corso"), ESITO("Esito"), CREDITI("Crediti");
-
-        @SuppressWarnings("rawtypes")
-        public static Class[] TYPE = new Class[] { String.class, Short.class, Short.class };
-
-        String msg;
-        Column(String msg){
-            this.msg = msg;
-        }
-
-        @Override
-        public String toString(){
-            return msg;
-        }
+        });
     }
 
     private static final Logger LOG = Logger.getLogger(MediaTable.class.getName());
+
 }

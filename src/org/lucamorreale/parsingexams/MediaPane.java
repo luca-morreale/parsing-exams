@@ -5,11 +5,9 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.EventHandler;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -67,9 +65,9 @@ public final class MediaPane extends JPanel implements ActionListener{
             LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
         }
 
-        addBtn.addActionListener(EventHandler.create(ActionListener.class, this, "addCourse"));
-        removeBtn.addActionListener(tMedia);
-        exportBtn.addActionListener(EventHandler.create(ActionListener.class, this, "esporta"));
+        addBtn.addActionListener(this);
+        removeBtn.addActionListener(this);
+        exportBtn.addActionListener(this);
 
         topPane.add(addBtn);
         topPane.add(removeBtn);
@@ -97,30 +95,28 @@ public final class MediaPane extends JPanel implements ActionListener{
         this.add(panel, BorderLayout.SOUTH);
     }
 
-    public void addCourse(){
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                CourseDialog result = new CourseDialog(MediaTable.DB_TABLE);
-                result.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosed(java.awt.event.WindowEvent e) {
-                        tMedia.refresh();
-                    }
-                });
-            }
-        });
+    private void calculateAverage(){
+        String out = tMedia.getMedia();
+        if(tMedia.getRowCount() > 0){
+            mediaLabel.setText("Media Pesata: " + out);
+        }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-        if(tMedia.getRowCount() == 0){
-            mediaLabel.setText("Media Pesata: " + tMedia.getMedia());
-            return;
-        } else {
-            mediaLabel.setText("Media Pesata: " + tMedia.getMedia());
-        }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        if(e.getSource() == addBtn){
+            e.setSource(MediaTable.ACTION.ADD);
+        } else if(e.getSource() == exportBtn) {
+            e.setSource(ParseTable.ACTION.SAVE);
+        } else if(e.getSource() == removeBtn){
+            e.setSource(ParseTable.ACTION.DELETE);
+        } else if(e.getSource() == calculateBtn){
+            calculateAverage();
+            return;
+        }
+        tMedia.actionPerformed(e);
     }
 
 
