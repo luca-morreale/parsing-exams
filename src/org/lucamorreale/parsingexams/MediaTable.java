@@ -60,7 +60,6 @@ public final class MediaTable extends DatabaseTable {
 
         result = result.divide(denominatore, 2, RoundingMode.HALF_UP);
 
-        notifyAll();
         return String.valueOf(result.toString());
     }
 

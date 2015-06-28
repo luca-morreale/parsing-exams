@@ -44,13 +44,14 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             model.addColumn(c);
         }
 
-        popupMenu = new TablePopupMenu(null);
+        popupMenu = new TablePopupMenu(this);
         init();
 
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 db = new SQLiteManager("jdbc:sqlite:data/source.sqlite");
+                refreshTable();
             }
         });
 
@@ -104,7 +105,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             }
         }
         model.addTableModelListener(this);
-        notifyAll();
+        updateGUITable();
     }
 
     protected void deleteRow(){
@@ -147,7 +148,6 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         db.updateQuery(DB_TABLE, set, "id = " + id);
 
         ((DefaultTableModel) evt.getSource()).addTableModelListener(this);
-        notifyAll();
     }
 
     abstract void emptyTableError();
@@ -167,6 +167,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         } else if(e.getSource() == ACTION.SAVE) {
             saveTable();
         }
+        updateGUITable();
     }
 
     @Override
@@ -186,6 +187,11 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
                 this.clearSelection();
             }
         }
+    }
+
+    protected void updateGUITable() {
+        revalidate();
+        repaint();
     }
 
     @Override
