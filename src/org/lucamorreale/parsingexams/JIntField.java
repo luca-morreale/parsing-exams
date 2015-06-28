@@ -39,9 +39,9 @@ public class JIntField extends JTextField {
                 return;
             }
 
-            str = str.replaceAll("[^0-9]", "");
-            str = str.trim();
-            super.insertString( offs, str, a );
+            String formattedString = str.replaceAll("[^0-9]", "");
+            formattedString = formattedString.trim();
+            super.insertString( offs, formattedString, a );
         }
     }
 }

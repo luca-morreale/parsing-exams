@@ -39,8 +39,8 @@ public class JLetterField extends JTextField {
                 return;
             }
 
-            str = str.replaceAll("[0-9]", "");
-            super.insertString( offs, str, a );
+            String formattedString = str.replaceAll("[0-9]", "");
+            super.insertString( offs, formattedString, a );
         }
     }
 }

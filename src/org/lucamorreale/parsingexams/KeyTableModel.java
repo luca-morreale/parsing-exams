@@ -8,7 +8,6 @@
 package org.lucamorreale.parsingexams;
 
 import java.util.Vector;
-import java.util.logging.Logger;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
@@ -51,7 +50,7 @@ public class KeyTableModel extends DefaultTableModel{
     public KeyTableModel(int numRows, int numColumns) {
         Vector defaultNames = new Vector(numColumns);
         Vector data = new Vector(numRows);
-        Vector keys = new Vector(numRows);
+        Vector keyVector = new Vector(numRows);
 
         for (int i = 0; i < numColumns; i++) {
             defaultNames.add(super.getColumnName(i));
@@ -62,7 +61,7 @@ public class KeyTableModel extends DefaultTableModel{
             tmp.setSize(numColumns);
             data.add(tmp);
         }
-        setDataVector(data, defaultNames, keys);
+        setDataVector(data, defaultNames, keyVector);
     }
 
     /**
@@ -84,10 +83,11 @@ public class KeyTableModel extends DefaultTableModel{
             numColumns = columnNames.size();
         }
 
-        while (0 < numRows--) {
+        int n = numRows;
+        while (0 < n--) {
 
             Vector rowData = new Vector();
-            rowData.setSize(numColumns);
+            rowData.setSize(n);
             data.add(rowData);
         }
         setDataVector(data, columnNames);
@@ -164,7 +164,7 @@ public class KeyTableModel extends DefaultTableModel{
     public Object[][] getDataMatrix() {
 
         if(this.dataVector == null){
-            return null;
+            return new Object[0][0];
         }
 
         Object[][] matrix = new Object[this.getRowCount()][this.getColumnCount()];
@@ -192,7 +192,7 @@ public class KeyTableModel extends DefaultTableModel{
     public Object[] getKeyArray(){
 
         if(this.keys == null){
-            return null;
+            return new Object[0];
         }
 
         return this.keys.toArray();
@@ -275,6 +275,7 @@ public class KeyTableModel extends DefaultTableModel{
      */
     public void insertRow(int row, Object[] rowData, Object key) {
         insertRow(row, convertToVector(rowData));
+        keys.addElement(key);
     }
 
     /**
@@ -396,11 +397,5 @@ public class KeyTableModel extends DefaultTableModel{
     public void setColumnsClass(Class[] type){
         this.columnTypes = type;
     }
-
-
-    /**
-     *
-     */
-    private static final Logger LOG = Logger.getLogger(KeyTableModel.class.getName());
 
 }

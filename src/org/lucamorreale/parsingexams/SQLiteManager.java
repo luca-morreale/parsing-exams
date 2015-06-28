@@ -44,7 +44,7 @@ public final class SQLiteManager {
     }
 
     public boolean isConnected(){
-        return (conn!= null);
+        return conn != null;
     }
 
 
@@ -188,19 +188,7 @@ public final class SQLiteManager {
 
         String query = "SELECT ";
         query += buildString(fields, ",");
-        query += " FROM "+table+" ";
-        query += buildString(condition, "AND");
-        query += after_where;
-
-        try {
-            PreparedStatement preparedStatement = conn.prepareStatement(query);
-            setField(preparedStatement, condition, 1);
-            rs = preparedStatement.executeQuery();
-        } catch (SQLException e) {
-            LOGGER.severe("An error occured while performing a select query " + e);
-            return false;
-        }
-        return true;
+        return buildSelectBodyQuery(table, condition, after_where, query);
 
     }
 
@@ -212,10 +200,15 @@ public final class SQLiteManager {
      * @param after_where
      * @return
      */
-    public boolean selectQuery(String table, String[][] condition, String fields, String after_where){
+    public boolean selectQuery(String table, String[][] condition, String field, String after_where){
 
-        String query = "SELECT "+fields;
-        query += " FROM "+table+" ";
+        String query = "SELECT "+field;
+        return buildSelectBodyQuery(table, condition, after_where, query);
+
+    }
+
+    private boolean buildSelectBodyQuery(String table, String[][] condition, String after_where, String queryHeader) {
+        String query = queryHeader + " FROM " + table + " ";
         query += buildString(condition, "AND");
         query += after_where;
 
@@ -228,7 +221,6 @@ public final class SQLiteManager {
             return false;
         }
         return true;
-
     }
 
     /**
@@ -412,7 +404,7 @@ public final class SQLiteManager {
             return rs.getBytes(indexField);
         } catch (SQLException e) {
             LOGGER.severe("Impossible to get an array for the requested field" + e);
-            return null;
+            return new byte[0];
         }
     }
     /**
@@ -421,13 +413,14 @@ public final class SQLiteManager {
      * @return
      */
     public Object getField(int indexField){
-        indexField++;
+
+        int index  = indexField + 1;
 
         try{
             ResultSetMetaData rm = rs.getMetaData();
-            String type = rm.getColumnTypeName(indexField);
+            String type = rm.getColumnTypeName(index);
 
-            return factoryTypeData(indexField, type);
+            return factoryTypeData(index, type);
         }catch(SQLException e){
             LOGGER.severe("Impossible to get the requested field" + e);
         }

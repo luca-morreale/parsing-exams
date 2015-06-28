@@ -9,6 +9,9 @@ package org.lucamorreale.parsingexams;
  */
 public class Main {
 
+    private Main() {
+    }
+
     /**
      * @param args
      */

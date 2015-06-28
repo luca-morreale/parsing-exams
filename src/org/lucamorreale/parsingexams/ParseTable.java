@@ -5,10 +5,7 @@ package org.lucamorreale.parsingexams;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -19,8 +16,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public final class ParseTable extends DatabaseTable {
     private static final long serialVersionUID = -9029444808468680306L;
-
-    private static final Logger LOGGER = Logger.getLogger(ParseTable.class.getName());
 
     public static enum OPERATION {CLEAR, OPEN};
 
@@ -141,41 +136,8 @@ public final class ParseTable extends DatabaseTable {
         if (returnVal != JFileChooser.APPROVE_OPTION){
             return;
         }
-        synchronized(this){
-            writeData(getFileName(chooser));
-        }
 
-    }
-
-    private void writeData(String fileName) {
-        try {
-
-            PrintStream outStream = new PrintStream(fileName);
-            for(int row = 0; row < this.getRowCount(); row++) {
-                String data = "";
-                for(int col = 0; col < this.getColumnCount(); col++) {
-                    Object cell = this.getValueAt(row, col);
-                    if (cell != null) {
-                        data += cell.toString() + "\t";
-                    }
-                    data += "\t";
-                }
-                outStream.println(data);
-            }
-
-            outStream.close();
-        } catch (IOException e) {
-            LOGGER.severe("An error occured while trying to exporting data " + e);
-        }
-    }
-
-    private String getFileName(JFileChooser chooser){
-        String file = chooser.getSelectedFile().toString();
-        if( file.endsWith(".txt") || file.endsWith(".text")){
-            return file;
-        } else {
-            return file + ".txt";
-        }
+        writeData(getFileName(chooser));
     }
 
 }

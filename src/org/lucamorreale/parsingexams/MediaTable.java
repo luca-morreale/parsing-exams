@@ -4,12 +4,9 @@
 package org.lucamorreale.parsingexams;
 
 import java.awt.EventQueue;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,8 +17,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public final class MediaTable extends DatabaseTable {
     private static final long serialVersionUID = 3012089127775134645L;
-
-    private static final Logger LOGGER = Logger.getLogger(MediaTable.class.getName());
 
     private static final String DB_TABLE = "media";
 
@@ -92,37 +87,6 @@ public final class MediaTable extends DatabaseTable {
             return;
         }
         writeData(getFileName(chooser));
-    }
-
-    private void writeData(String fileName) {
-        try {
-
-            PrintStream outStream = new PrintStream(fileName);
-            for(int row = 0; row < this.getRowCount(); row++) {
-                String data = "";
-                for(int col = 0; col < this.getColumnCount(); col++) {
-                    Object cell = this.getValueAt(row, col);
-                    if (cell != null) {
-                        data += cell.toString() + "\t";
-                    }
-                    data += "\t";
-                }
-                outStream.println(data);
-            }
-
-            outStream.close();
-        } catch (IOException e) {
-            LOGGER.severe("An error occured while trying to export data " + e);
-        }
-    }
-
-    private String getFileName(JFileChooser chooser){
-        String file = chooser.getSelectedFile().toString();
-        if( file.endsWith(".txt") || file.endsWith(".text")){
-            return file;
-        } else {
-            return file + ".txt";
-        }
     }
 
     @Override

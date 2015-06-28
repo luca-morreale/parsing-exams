@@ -111,12 +111,12 @@ public class FileParser {
 
     private String clearString(String s, String subStr){
 
-        s = s.replaceFirst(subStr, "");
-        s = s.replaceAll("[^a-zA-Z0-9.,]", " ");
-        s = s.replaceAll("[^0-9., ]", "");
-        s = s.trim();
+        String formattedString = s.replaceFirst(subStr, "");
+        formattedString = formattedString.replaceAll("[^a-zA-Z0-9.,]", " ");
+        formattedString = formattedString.replaceAll("[^0-9., ]", "");
+        formattedString = formattedString.trim();
 
-        return s;
+        return formattedString;
     }
 
     public String[] getResults(){

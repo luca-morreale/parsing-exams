@@ -9,9 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
@@ -23,6 +27,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public abstract class DatabaseTable extends JTable implements MouseListener, ActionListener{
     private static final long serialVersionUID = -6102001466807223180L;
+    private static final Logger LOGGER = Logger.getLogger(DatabaseTable.class.getName());
 
     public static enum ACTION {UPDATE, DELETE, ADD, LOAD, SAVE};
 
@@ -148,6 +153,42 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
         db.updateQuery(DB_TABLE, set, "id = " + id);
 
         ((DefaultTableModel) evt.getSource()).addTableModelListener(this);
+    }
+
+    protected void writeData(String fileName) {
+        try {
+
+            PrintStream outStream = new PrintStream(fileName);
+            for(int row = 0; row < this.getRowCount(); row++) {
+                String data = generateDataFromRow(row);
+                outStream.println(data);
+            }
+
+            outStream.close();
+        } catch (IOException e) {
+            LOGGER.severe("An error occured while trying to export data " + e);
+        }
+    }
+
+    private String generateDataFromRow(int row) {
+        String data = "";
+        for(int col = 0; col < this.getColumnCount(); col++) {
+            Object cell = this.getValueAt(row, col);
+            if (cell != null) {
+                data += cell.toString() + "\t";
+            }
+            data += "\t";
+        }
+        return data;
+    }
+
+    protected String getFileName(JFileChooser chooser){
+        String file = chooser.getSelectedFile().toString();
+        if( file.endsWith(".txt") || file.endsWith(".text")){
+            return file;
+        } else {
+            return file + ".txt";
+        }
     }
 
     abstract void emptyTableError();
