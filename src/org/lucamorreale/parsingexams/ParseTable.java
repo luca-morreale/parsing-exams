@@ -17,7 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public final class ParseTable extends DatabaseTable {
     private static final long serialVersionUID = -9029444808468680306L;
 
-    public static enum OPERATION {CLEAR, OPEN};
+    public static enum OPERATION {CLEAR, OPEN}
 
     private static final String DB_TABLE = "parse";
 

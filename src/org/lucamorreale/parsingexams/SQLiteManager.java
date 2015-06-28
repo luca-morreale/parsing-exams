@@ -181,14 +181,14 @@ public final class SQLiteManager {
      * @param table
      * @param condition
      * @param fields
-     * @param after_where
+     * @param afterWhere
      * @return
      */
-    public boolean selectQuery(String table, String[][] condition, String[] fields, String after_where){
+    public boolean selectQuery(String table, String[][] condition, String[] fields, String afterWhere){
 
         String query = "SELECT ";
         query += buildString(fields, ",");
-        return buildSelectBodyQuery(table, condition, after_where, query);
+        return buildSelectBodyQuery(table, condition, afterWhere, query);
 
     }
 
@@ -197,20 +197,20 @@ public final class SQLiteManager {
      * @param table
      * @param condition
      * @param fields
-     * @param after_where
+     * @param afterWhere
      * @return
      */
-    public boolean selectQuery(String table, String[][] condition, String field, String after_where){
+    public boolean selectQuery(String table, String[][] condition, String field, String afterWhere){
 
         String query = "SELECT "+field;
-        return buildSelectBodyQuery(table, condition, after_where, query);
+        return buildSelectBodyQuery(table, condition, afterWhere, query);
 
     }
 
-    private boolean buildSelectBodyQuery(String table, String[][] condition, String after_where, String queryHeader) {
+    private boolean buildSelectBodyQuery(String table, String[][] condition, String afterWhere, String queryHeader) {
         String query = queryHeader + " FROM " + table + " ";
         query += buildString(condition, "AND");
-        query += after_where;
+        query += afterWhere;
 
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(query);

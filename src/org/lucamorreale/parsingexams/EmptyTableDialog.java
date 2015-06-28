@@ -20,7 +20,7 @@ import javax.swing.border.EmptyBorder;
 public final class EmptyTableDialog extends JDialog {
     private static final long serialVersionUID = 7341082940972275593L;
 
-    private static final String msg = "<html><div style=\"text-align: center;\">"
+    private static final String MESSAGE = "<html><div style=\"text-align: center;\">"
             + "<center><h2>Errore!</h2></center><br/>"
             + "La tabella selezionata è vuota, <br/>impossibile compiere l'operazione richiesta!<br/>"
             + "</div></html>";
@@ -46,7 +46,7 @@ public final class EmptyTableDialog extends JDialog {
         JPanel pane = new JPanel();
         pane.setBorder(new EmptyBorder(0, 10, 10, 10) );
 
-        JLabel message = new JLabel(msg);
+        JLabel message = new JLabel(MESSAGE);
         pane.add(message);
 
         this.add(pane, BorderLayout.CENTER);

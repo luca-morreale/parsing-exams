@@ -29,17 +29,17 @@ public class CourseDialog extends JDialog {
     private final JIntField creditIntField;
     private final JLetterField courseLetterField;
 
-    private final String DB_TABLE;
+    private final String dbTable;
     private final transient SQLiteManager db;
 
-    public CourseDialog(String db_table){
+    public CourseDialog(String dbTable){
         super();
         this.setLayout(new BorderLayout(0, 0));
         this.setAlwaysOnTop(true);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setTitle("Aggiungi Corso");
 
-        DB_TABLE = db_table;
+        this.dbTable = dbTable;
 
         saveButton = new JButton("Aggiungi Esito");
         generateButtonPane();
@@ -144,7 +144,7 @@ public class CourseDialog extends JDialog {
     }
 
     public void saveResult(){
-        db.insertQuery(DB_TABLE, new String[][]{
+        db.insertQuery(dbTable, new String[][]{
                 {"corso", courseLetterField.getText()},
                 {"esito", resultIntField.getText()},
                 {"crediti", creditIntField.getText()},

@@ -29,23 +29,23 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
     private static final long serialVersionUID = -6102001466807223180L;
     private static final Logger LOGGER = Logger.getLogger(DatabaseTable.class.getName());
 
-    public static enum ACTION {UPDATE, DELETE, ADD, LOAD, SAVE};
+    public static enum ACTION {UPDATE, DELETE, ADD, LOAD, SAVE}
 
     private transient SQLiteManager db;
     protected final KeyTableModel model;
     protected final TablePopupMenu popupMenu;
 
-    private final String DB_TABLE;
-    private transient final List<String> Columns;
+    private final String dbTable;
+    private final transient List<String> columns;
 
-    public DatabaseTable(List<String> columns, String db_table){
+    public DatabaseTable(List<String> columns, String dbTable){
         super();
 
-        DB_TABLE = db_table;
-        Columns = columns;
+        this.dbTable = dbTable;
+        this.columns = columns;
 
         this.model = new KeyTableModel();
-        for (String c : Columns) {
+        for (String c : columns) {
             model.addColumn(c);
         }
 
@@ -76,8 +76,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
 
     protected int getSelectedId(){
         int row = getSelectedModelRow();
-        int id = (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
-        return id;
+        return (Integer) model.getValueAt(row, KeyTableModel.COLUMN_KEY);
     }
 
     protected int getSelectedModelRow(){
@@ -86,9 +85,9 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
 
     protected String[] getFields(){
 
-        String fields[] = new String[Columns.size()];
+        String[] fields = new String[columns.size()];
         int i = 0;
-        for (String c : Columns) {
+        for (String c : columns) {
             fields[i++] = c.toLowerCase();
         }
         return fields;
@@ -99,7 +98,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             return;
         }
 
-        db.selectQuery(DB_TABLE, null, "*");
+        db.selectQuery(dbTable, null, "*");
 
         model.removeTableModelListener(this);
 
@@ -126,7 +125,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             model.removeTableModelListener(this);
 
             model.removeRow(row);
-            db.deleteQuery(DB_TABLE, new String[][]{
+            db.deleteQuery(dbTable, new String[][]{
                     {"id", id+""}
             });
 
@@ -150,7 +149,7 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
             set[i][0] = fields[i];
             set[i][1] = this.getValueAt(row, i).toString();
         }
-        db.updateQuery(DB_TABLE, set, "id = " + id);
+        db.updateQuery(dbTable, set, "id = " + id);
 
         ((DefaultTableModel) evt.getSource()).addTableModelListener(this);
     }

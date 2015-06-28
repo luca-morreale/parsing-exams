@@ -18,7 +18,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
  */
 public class FileParser {
 
-    private static Logger LOGGER = Logger.getLogger(FileParser.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(FileParser.class.getName());
 
     private File file;
     private String[] patterns;
@@ -70,7 +70,7 @@ public class FileParser {
 
         for (int i = 0; i < patterns.length; i++) {
 
-            String scan[] = data.split(patterns[i]);
+            String[] scan = data.split(patterns[i]);
             if(scan.length >1){
                 results[i] = scan[1].split("\n")[0];
                 results[i] = clearString(results[i], patterns[i]);
