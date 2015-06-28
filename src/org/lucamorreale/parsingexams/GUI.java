@@ -52,9 +52,9 @@ public final class GUI extends JFrame implements ActionListener{
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
-        // TODO Auto-generated method stub
-
+        // Unused because JMenuBar call itself methods
     }
 
     public void exit(){

@@ -33,24 +33,29 @@ public class PlainButton extends JButton implements MouseListener {
         this.addMouseListener(this);
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         this.setBorderPainted(true);
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         this.setBorderPainted(false);
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
+        // Unused method because there is no need to catch click event
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
+        // Unused method because there is no need to catch entering mouse event
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
+        // Unused method because there is no need to catch exiting mouse event
     }
 
 

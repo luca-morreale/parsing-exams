@@ -195,16 +195,24 @@ public abstract class DatabaseTable extends JTable implements MouseListener, Act
     }
 
     @Override
-    public void mouseClicked(MouseEvent evt) { } // TODO Auto-generated method stub
+    public void mouseClicked(MouseEvent evt) {
+        // Unused method because there is no need to catch click event
+    }
 
     @Override
-    public void mouseEntered(MouseEvent evt) { } // TODO Auto-generated method stub
+    public void mouseEntered(MouseEvent evt) {
+        // Unused method because there is no need to catch entering mouse event
+    }
 
     @Override
-    public void mouseExited(MouseEvent evt) { } // TODO Auto-generated method stub
+    public void mouseExited(MouseEvent evt) {
+        // Unused method because there is no need to catch exiting mouse event
+    }
 
     @Override
-    public void mousePressed(MouseEvent evt) { } // TODO Auto-generated method stub
+    public void mousePressed(MouseEvent evt) {
+        // Unused method because there is no need to catch mouse press event
+    }
 
 
 
