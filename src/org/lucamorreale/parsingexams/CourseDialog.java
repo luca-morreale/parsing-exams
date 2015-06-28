@@ -24,13 +24,13 @@ import com.jgoodies.forms.layout.FormLayout;
 public class CourseDialog extends JDialog {
     private static final long serialVersionUID = -8178179660938779222L;
 
-    private JButton saveButton;
-    private JIntField resultIntField;
-    private JIntField creditIntField;
-    private JLetterField courseLetterField;
+    private final JButton saveButton;
+    private final JIntField resultIntField;
+    private final JIntField creditIntField;
+    private final JLetterField courseLetterField;
 
     private final String DB_TABLE;
-    private SQLiteManager db;
+    private final transient SQLiteManager db;
 
     public CourseDialog(String db_table){
         super();

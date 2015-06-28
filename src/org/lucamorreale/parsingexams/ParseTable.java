@@ -20,9 +20,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public final class ParseTable extends DatabaseTable {
     private static final long serialVersionUID = -9029444808468680306L;
 
+    private static final Logger LOGGER = Logger.getLogger(ParseTable.class.getName());
 
-    public static final String DB_TABLE = "parse";
     public static enum OPERATION {CLEAR, OPEN};
+
+    private static final String DB_TABLE = "parse";
 
     public ParseTable(){
         super(Arrays.asList("Matricola", "Nome", "Cognome", "Esito"), DB_TABLE);
@@ -39,7 +41,6 @@ public final class ParseTable extends DatabaseTable {
         this.getColumnModel().getColumn(3).setMaxWidth(500);
 
         this.getTableHeader().setReorderingAllowed(false);
-
 
     }
 
@@ -67,7 +68,6 @@ public final class ParseTable extends DatabaseTable {
         }
 
         model.addTableModelListener(this);
-        notifyAll();
     }
 
     public void parseFile(){
@@ -105,7 +105,7 @@ public final class ParseTable extends DatabaseTable {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new EmptyTableDialog();
+                new EmptyTableDialog().setVisible(true);
             }
         });
 
@@ -142,27 +142,31 @@ public final class ParseTable extends DatabaseTable {
             return;
         }
         synchronized(this){
-            try {
-
-                PrintStream outStream = new PrintStream(getFileName(chooser));
-                for(int row = 0; row < this.getRowCount(); row++) {
-                    String data = "";
-                    for(int col = 0; col < this.getColumnCount(); col++) {
-                        Object cell = this.getValueAt(row, col);
-                        if (cell != null) {
-                            data += cell.toString() + "\t";
-                        }
-                        data += "\t";
-                    }
-                    outStream.println(data);
-                }
-
-                outStream.close();
-            } catch (IOException e) {
-                LOG.severe(e.getMessage() + " esporta()");
-            }
+            writeData(getFileName(chooser));
         }
 
+    }
+
+    private void writeData(String fileName) {
+        try {
+
+            PrintStream outStream = new PrintStream(fileName);
+            for(int row = 0; row < this.getRowCount(); row++) {
+                String data = "";
+                for(int col = 0; col < this.getColumnCount(); col++) {
+                    Object cell = this.getValueAt(row, col);
+                    if (cell != null) {
+                        data += cell.toString() + "\t";
+                    }
+                    data += "\t";
+                }
+                outStream.println(data);
+            }
+
+            outStream.close();
+        } catch (IOException e) {
+            LOGGER.severe("An error occured while trying to exporting data " + e);
+        }
     }
 
     private String getFileName(JFileChooser chooser){
@@ -173,7 +177,5 @@ public final class ParseTable extends DatabaseTable {
             return file + ".txt";
         }
     }
-
-    private static final Logger LOG = Logger.getLogger(ParseTable.class.getName());
 
 }

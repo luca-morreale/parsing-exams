@@ -22,14 +22,12 @@ import java.util.logging.Logger;
 
 public final class SQLiteManager {
 
+    private static final Logger LOGGER = Logger.getLogger(SQLiteManager.class.getName());
+
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
 
-    /**
-     *
-     * @param pathDb
-     */
     public SQLiteManager(String pathDb){
 
         try{
@@ -39,16 +37,15 @@ public final class SQLiteManager {
             stmt = conn.createStatement();
 
         } catch(ClassNotFoundException e){
-            LOG.severe(SQLiteManager.class +" Class Not Found ");
+            LOGGER.severe("Class Not Found " + e);
         } catch(SQLException e) {
-            LOG.severe(SQLiteManager.class +" "+ e.getMessage());
+            LOGGER.severe("A strange error occured "+ e);
         }
     }
 
     public boolean isConnected(){
         return (conn!= null);
     }
-
 
 
     /**
@@ -60,16 +57,16 @@ public final class SQLiteManager {
      */
     public boolean updateQuery(String table, String[][] set, String condition){
 
-        String query = "UPDATE "+table+" SET ";
+        String query = "UPDATE " + table + " SET ";
         query += buildString(set, ",");
-        query += " WHERE "+condition;
+        query += " WHERE " + condition;
 
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             setField(preparedStatement, set, 1);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" updateQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing an update query "+ e);
             return false;
         }
         return true;
@@ -84,7 +81,7 @@ public final class SQLiteManager {
      */
     public boolean updateQuery(String table, String[][] set, String[][] condition){
 
-        String query = "UPDATE "+table+" SET ";
+        String query = "UPDATE " + table + " SET ";
         query += buildString(set, ",");
         query += " WHERE " + buildString(condition, "AND");
 
@@ -94,7 +91,7 @@ public final class SQLiteManager {
             setField(preparedStatement, condition, set.length+1);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" updateQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing an update query " + e);
             return false;
         }
         return true;
@@ -106,7 +103,6 @@ public final class SQLiteManager {
      * @return
      */
     public boolean selectQuery(String table){
-
         return query("SELECT * FROM "+table, false);
     }
 
@@ -126,7 +122,7 @@ public final class SQLiteManager {
             setField(preparedStatement, condition, 1);
             rs = preparedStatement.executeQuery();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" selectQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing a select query " + e);
             return false;
         }
         return true;
@@ -149,7 +145,7 @@ public final class SQLiteManager {
             setField(preparedStatement, condition, 1);
             rs = preparedStatement.executeQuery();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" selectQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing a select query " + e);
             return false;
         }
         return true;
@@ -174,7 +170,7 @@ public final class SQLiteManager {
             setField(preparedStatement, condition, 1);
             rs = preparedStatement.executeQuery();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" selectQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing a select query " + e);
             return false;
         }
         return true;
@@ -201,7 +197,7 @@ public final class SQLiteManager {
             setField(preparedStatement, condition, 1);
             rs = preparedStatement.executeQuery();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" selectQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing a select query " + e);
             return false;
         }
         return true;
@@ -228,7 +224,7 @@ public final class SQLiteManager {
             setField(preparedStatement, condition, 1);
             rs = preparedStatement.executeQuery();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" selectQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing a select query " + e);
             return false;
         }
         return true;
@@ -258,7 +254,7 @@ public final class SQLiteManager {
             setField(preparedStatement, values, 1);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" insertQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing an insert query " + e);
             return false;
         }
 
@@ -282,12 +278,11 @@ public final class SQLiteManager {
             setField(preparedStatement, where, 1);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" deleteQuery() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing a delete query " + e);
             return false;
         }
 
         return true;
-
     }
 
     /**
@@ -307,7 +302,7 @@ public final class SQLiteManager {
             }
 
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class +" query() "+ e.getMessage());
+            LOGGER.severe("An error occured while performing a query " + e);
             return false;
         }
         return true;
@@ -325,7 +320,7 @@ public final class SQLiteManager {
                 return rs.next();
             }
         } catch (SQLException e) {
-            LOG.severe(SQLiteManager.class+" hasNext() "+e.getMessage());
+            LOGGER.severe("There isn't any other elemnts left" + e);
             return false;
         }
     }
@@ -334,7 +329,7 @@ public final class SQLiteManager {
         try {
             return rs.getMetaData().getColumnCount();
         } catch (SQLException e) {
-            LOG.severe(e.getMessage() + " getColumnsCount()");
+            LOGGER.severe("Impossible to count remaining elements " + e);
             return -1;
         }
     }
@@ -364,7 +359,7 @@ public final class SQLiteManager {
         try {
             return rs.getBigDecimal(indexField);
         } catch (SQLException e) {
-            LOG.severe(e.getMessage() + " getBigDecimal()");
+            LOGGER.severe("Impossible to get a BigDecimal for the requested field" + e);
             return null;
         }
     }
@@ -377,7 +372,7 @@ public final class SQLiteManager {
         try {
             return rs.getArray(indexField);
         } catch (SQLException e) {
-            LOG.severe(e.getMessage() + " getArray()");
+            LOGGER.severe("Impossible to get an array for the requested field" + e);
             return null;
         }
     }
@@ -390,7 +385,7 @@ public final class SQLiteManager {
         try {
             return rs.getFloat(indexField);
         } catch (SQLException e) {
-            LOG.severe(e.getMessage() + " getFloat()");
+            LOGGER.severe("Impossible to get a float for the requested field" + e);
             return 0;
         }
     }
@@ -403,7 +398,7 @@ public final class SQLiteManager {
         try {
             return rs.getByte(indexField);
         } catch (SQLException e) {
-            LOG.severe(e.getMessage() + " getByte()");
+            LOGGER.severe("Impossible to get a byte for the requested field" + e);
             return 0;
         }
     }
@@ -416,7 +411,7 @@ public final class SQLiteManager {
         try {
             return rs.getBytes(indexField);
         } catch (SQLException e) {
-            LOG.severe(e.getMessage() + " getBytes()");
+            LOGGER.severe("Impossible to get an array for the requested field" + e);
             return null;
         }
     }
@@ -432,26 +427,32 @@ public final class SQLiteManager {
             ResultSetMetaData rm = rs.getMetaData();
             String type = rm.getColumnTypeName(indexField);
 
-            switch(type.toLowerCase()){
-                case "integer":
-                    return rs.getInt(indexField);
-                case "text":
-                    return rs.getString(indexField);
-                case "string":
-                    return rs.getString(indexField);
-                case "real":
-                    return rs.getDouble(indexField);
-                case "date":
-                    return rs.getDate(indexField);
-                case "boolean":
-                    return rs.getBoolean(indexField);
-                case "blob":
-                    return rs.getBlob(indexField);
-            }
+            return factoryTypeData(indexField, type);
         }catch(SQLException e){
-            LOG.severe(SQLiteManager.class+" getField() "+e.getMessage());
+            LOGGER.severe("Impossible to get the requested field" + e);
         }
         return null;
+    }
+
+    private Object factoryTypeData(int indexField, String type) throws SQLException {
+        switch(type.toLowerCase()){
+            case "integer":
+                return rs.getInt(indexField);
+            case "text":
+                return rs.getString(indexField);
+            case "string":
+                return rs.getString(indexField);
+            case "real":
+                return rs.getDouble(indexField);
+            case "date":
+                return rs.getDate(indexField);
+            case "boolean":
+                return rs.getBoolean(indexField);
+            case "blob":
+                return rs.getBlob(indexField);
+            default:
+                throw new SQLException("The type is not recognizable.");
+        }
     }
 
     /**
@@ -465,12 +466,10 @@ public final class SQLiteManager {
             int indexField = rs.findColumn(field);
             return getField(indexField-1);
         }catch(SQLException e){
-            LOG.severe(SQLiteManager.class+" getField() "+e.getMessage());
+            LOGGER.severe("Impossible to get the requested field" + e);
         }
         return null;
     }
-
-
 
 
     /**
@@ -479,7 +478,7 @@ public final class SQLiteManager {
      * @param sep
      * @return
      */
-    public static String buildString(String[][] matrix, String sep){
+    private static String buildString(String[][] matrix, String sep){
 
         String s = "";
         if(matrix==null){
@@ -502,7 +501,7 @@ public final class SQLiteManager {
      * @param sep
      * @return
      */
-    public static String buildString(String[] array, String sep){
+    private static String buildString(String[] array, String sep){
 
         String s = "";
         if(array==null){
@@ -525,7 +524,7 @@ public final class SQLiteManager {
      * @param set
      * @param startIndex
      */
-    public static void setField(PreparedStatement stm, String[][] set, int startIndex){
+    private static void setField(PreparedStatement stm, String[][] set, int startIndex){
 
         if(set == null){
             return;
@@ -537,14 +536,10 @@ public final class SQLiteManager {
             try {
                 stm.setString(startIndex+i, set[i][1]);
             } catch (SQLException e) {
-                LOG.severe(SQLiteManager.class +" setField() "+ e.getMessage());
+                LOGGER.severe("Impossible to set the requested field" + e);
             }
         }
 
     }
 
-    /**
-     *
-     */
-    private static final Logger LOG = Logger.getLogger(SQLiteManager.class.getName());
 }

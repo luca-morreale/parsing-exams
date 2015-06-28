@@ -16,8 +16,8 @@ import javax.swing.JPopupMenu;
 public class TablePopupMenu extends JPopupMenu implements ActionListener{
     private static final long serialVersionUID = -3967665426112157339L;
 
-    private JMenuItem deleteItm;
-    private ActionListener actionToCall;
+    private final transient JMenuItem deleteItm;
+    private final transient ActionListener actionToCall;
 
     public TablePopupMenu(ActionListener listenerToCall){
         super();

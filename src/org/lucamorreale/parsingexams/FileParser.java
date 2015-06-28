@@ -18,6 +18,8 @@ import org.apache.pdfbox.util.PDFTextStripper;
  */
 public class FileParser {
 
+    private static Logger LOGGER = Logger.getLogger(FileParser.class.getName());
+
     private File file;
     private String[] patterns;
     private String[] results;
@@ -41,55 +43,16 @@ public class FileParser {
     }
 
     public String extractData(){
-
-        PDDocument doc = null;
-        String data = "";
-
-        if (file.getAbsolutePath().endsWith(".txt")) {
-
-            try {
-                data = new Scanner(file).useDelimiter("\\Z").next();
-            } catch (FileNotFoundException e) {
-                LOG.severe("File doesn't exist");
-            }
-        } else if (file.getAbsolutePath().endsWith(".pdf")) {
-
-            try {
-                doc = PDDocument.load(file);
-                PDFTextStripper stripper = new PDFTextStripper();
-                data = stripper.getText(doc);
-                doc.close();
-            } catch (IOException e) {
-                LOG.severe(e.getMessage());
-            }
-        }
-
-        return data;
-
+        return FileParser.extracData(file);
     }
 
     public static String extracData(File file){
-
-        PDDocument doc = null;
         String data = "";
 
         if (file.getAbsolutePath().endsWith(".txt")) {
-
-            try {
-                data = new Scanner(file).useDelimiter("\\Z").next();
-            } catch (FileNotFoundException e) {
-                LOG.severe("File doesn't exist");
-            }
+            data = loadDataFromTXT(file);
         } else if (file.getAbsolutePath().endsWith(".pdf")) {
-
-            try {
-                doc = PDDocument.load(file);
-                PDFTextStripper stripper = new PDFTextStripper();
-                data = stripper.getText(doc);
-                doc.close();
-            } catch (IOException e) {
-                LOG.severe(e.getMessage());
-            }
+            data = loadDataFromPDF(file);
         }
 
         return data;
@@ -120,6 +83,32 @@ public class FileParser {
         return results;
     }
 
+    private static String loadDataFromPDF(File file) {
+        PDDocument doc;
+        String data = "";
+
+        try {
+            doc = PDDocument.load(file);
+            PDFTextStripper stripper = new PDFTextStripper();
+            data = stripper.getText(doc);
+            doc.close();
+        } catch (IOException e) {
+            LOGGER.severe("Impossible to load the pdf file " + e);
+        }
+        return data;
+    }
+
+    private static String loadDataFromTXT(File file) {
+        String data = "";
+
+        try {
+            data = new Scanner(file).useDelimiter("\\Z").next();
+        } catch (FileNotFoundException e) {
+            LOGGER.severe("File doesn't exist " + e);
+        }
+        return data;
+    }
+
     private String clearString(String s, String subStr){
 
         s = s.replaceFirst(subStr, "");
@@ -134,5 +123,4 @@ public class FileParser {
        return results;
     }
 
-    private static Logger LOG = Logger.getLogger(FileParser.class.getName());
 }

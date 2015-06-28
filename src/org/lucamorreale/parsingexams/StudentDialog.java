@@ -24,12 +24,12 @@ import com.jgoodies.forms.layout.FormLayout;
 public final class StudentDialog extends JDialog {
     private static final long serialVersionUID = -8916667523732132664L;
 
-    private SQLiteManager db;
-    private JButton saveButton;
-    private JButton cancelButton;
-    private JLetterField nomeTextField;
-    private JIntField matricolaTextField;
-    private JLetterField cognomeTextField;
+    private final transient SQLiteManager db;
+    private final JButton saveButton;
+    private final JButton cancelButton;
+    private final JLetterField nomeTextField;
+    private final JIntField matricolaTextField;
+    private final JLetterField cognomeTextField;
 
     private final String DB_TABLE;
 
@@ -45,7 +45,6 @@ public final class StudentDialog extends JDialog {
         saveButton = new JButton("Salva");
         cancelButton = new JButton("Cancel");
         generateButtonPane();
-
 
 
         nomeTextField = new JLetterField(10);

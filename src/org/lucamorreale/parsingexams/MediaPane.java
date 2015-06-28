@@ -23,13 +23,14 @@ import javax.swing.JScrollPane;
 public final class MediaPane extends JPanel implements ActionListener{
     private static final long serialVersionUID = 4619821091873343199L;
 
-    private MediaTable tMedia;
-    private PlainButton addBtn;
-    private PlainButton removeBtn;
-    private PlainButton exportBtn;
-    private JButton calculateBtn;
-    private JLabel mediaLabel;
+    private static final Logger LOGGER = Logger.getLogger(MediaPane.class.getName());
 
+    private final MediaTable tMedia;
+    private final PlainButton addBtn;
+    private final PlainButton removeBtn;
+    private final PlainButton exportBtn;
+    private final JButton calculateBtn;
+    private final JLabel mediaLabel;
 
 
     public MediaPane(){
@@ -62,7 +63,7 @@ public final class MediaPane extends JPanel implements ActionListener{
             removeBtn.setIcon(new ImageIcon(GUI.class.getResource("/resources/images/delete.png")));
             exportBtn.setIcon(new ImageIcon(GUI.class.getResource("/resources/images/save.png")));
         } catch(NullPointerException exc) {
-            LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
+            LOGGER.severe(PlainButton.class +" resources not found: "+ exc);
         }
 
         addBtn.addActionListener(this);
@@ -119,6 +120,4 @@ public final class MediaPane extends JPanel implements ActionListener{
         tMedia.actionPerformed(e);
     }
 
-
-    private static final Logger LOG = Logger.getLogger(MediaPane.class.getName());
 }

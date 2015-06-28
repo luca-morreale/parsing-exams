@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
 public final class MainWindowMenu extends JMenuBar{
     private static final long serialVersionUID = -4760379938611375664L;
 
-    private ActionListener actionToCall;
+    private transient ActionListener actionToCall;
 
     public MainWindowMenu(ActionListener listenerToCall){
         super();
@@ -31,12 +31,11 @@ public final class MainWindowMenu extends JMenuBar{
         JMenu mFile = new JMenu("File");
         JMenuItem itemExit = new JMenuItem("Exit");
 
-        itemExit.addActionListener(EventHandler.create(ActionListener.class, this.actionToCall, "exit"));    // at row
+        itemExit.addActionListener(EventHandler.create(ActionListener.class, this.actionToCall, "exit"));
         mFile.addSeparator();
         mFile.add(itemExit);
 
         this.add(mFile);
-
     }
 
 

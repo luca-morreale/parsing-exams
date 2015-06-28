@@ -21,7 +21,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public final class MediaTable extends DatabaseTable {
     private static final long serialVersionUID = 3012089127775134645L;
 
-    public static final String DB_TABLE = "media";
+    private static final Logger LOGGER = Logger.getLogger(MediaTable.class.getName());
+
+    private static final String DB_TABLE = "media";
 
     public MediaTable(){
         super(Arrays.asList("Corso", "Esito", "Crediti"), DB_TABLE);
@@ -36,11 +38,9 @@ public final class MediaTable extends DatabaseTable {
         this.getColumnModel().getColumn(2).setMaxWidth(200);
 
         this.getTableHeader().setReorderingAllowed(false);
-
     }
 
-
-    public synchronized String getMedia(){
+    protected synchronized String getMedia(){
 
         if(this.getRowCount() == 0){
             emptyTableError();
@@ -69,7 +69,7 @@ public final class MediaTable extends DatabaseTable {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new EmptyTableDialog();
+                new EmptyTableDialog().setVisible(true);
             }
         });
     }
@@ -91,26 +91,28 @@ public final class MediaTable extends DatabaseTable {
         if (returnVal != JFileChooser.APPROVE_OPTION){
             return;
         }
-        synchronized(this){
-            try {
+        writeData(getFileName(chooser));
+    }
 
-                PrintStream outStream = new PrintStream(getFileName(chooser));
-                for(int row = 0; row < this.getRowCount(); row++) {
-                    String data = "";
-                    for(int col = 0; col < this.getColumnCount(); col++) {
-                        Object cell = this.getValueAt(row, col);
-                        if (cell != null) {
-                            data += cell.toString() + "\t";
-                        }
-                        data += "\t";
+    private void writeData(String fileName) {
+        try {
+
+            PrintStream outStream = new PrintStream(fileName);
+            for(int row = 0; row < this.getRowCount(); row++) {
+                String data = "";
+                for(int col = 0; col < this.getColumnCount(); col++) {
+                    Object cell = this.getValueAt(row, col);
+                    if (cell != null) {
+                        data += cell.toString() + "\t";
                     }
-                    outStream.println(data);
+                    data += "\t";
                 }
-
-                outStream.close();
-            } catch (IOException e) {
-                LOG.severe(e.getMessage() + " esporta()");
+                outStream.println(data);
             }
+
+            outStream.close();
+        } catch (IOException e) {
+            LOGGER.severe("An error occured while trying to export data " + e);
         }
     }
 
@@ -138,7 +140,5 @@ public final class MediaTable extends DatabaseTable {
             }
         });
     }
-
-    private static final Logger LOG = Logger.getLogger(MediaTable.class.getName());
 
 }

@@ -24,14 +24,14 @@ import javax.swing.table.DefaultTableModel;
 public abstract class DatabaseTable extends JTable implements MouseListener, ActionListener{
     private static final long serialVersionUID = -6102001466807223180L;
 
-    private SQLiteManager db;
-    protected KeyTableModel model;
-    protected TablePopupMenu popupMenu;
+    public static enum ACTION {UPDATE, DELETE, ADD, LOAD, SAVE};
+
+    private transient SQLiteManager db;
+    protected final KeyTableModel model;
+    protected final TablePopupMenu popupMenu;
 
     private final String DB_TABLE;
-    private final List<String> Columns;
-
-    public static enum ACTION {UPDATE, DELETE, ADD, LOAD, SAVE};
+    private transient final List<String> Columns;
 
     public DatabaseTable(List<String> columns, String db_table){
         super();

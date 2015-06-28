@@ -20,19 +20,18 @@ import javax.swing.JScrollPane;
 public final class ParsePane extends JPanel implements ActionListener{
     private static final long serialVersionUID = -3974194640480696898L;
 
+    private static final Logger LOGGER = Logger.getLogger(ParsePane.class.getName());
 
-    private ParseTable tParse;
-    private PlainButton addBtn;
-    private PlainButton openBtn;
-    private PlainButton clearBtn;
-    private PlainButton exportBtn;
+    private final ParseTable tParse;
+    private final PlainButton addBtn;
+    private final PlainButton openBtn;
+    private final PlainButton clearBtn;
+    private final PlainButton exportBtn;
 
 
     public ParsePane(){
         super();
-
-
-        this.setLayout(new BorderLayout());
+        super.setLayout(new BorderLayout());
 
         tParse = new ParseTable();
         generateCenterPane();
@@ -55,7 +54,7 @@ public final class ParsePane extends JPanel implements ActionListener{
             clearBtn.setIcon(new ImageIcon(GUI.class.getResource("/resources/images/delete_all.png")));
             exportBtn.setIcon(new ImageIcon(GUI.class.getResource("/resources/images/save.png")));
         } catch(NullPointerException exc) {
-            LOG.severe(PlainButton.class +" resources not found: "+ exc.getMessage());
+            LOGGER.severe(PlainButton.class +" resources not found: "+ exc);
         }
 
         addBtn.addActionListener(this);
@@ -93,5 +92,4 @@ public final class ParsePane extends JPanel implements ActionListener{
         tParse.actionPerformed(e);
     }
 
-    private static final Logger LOG = Logger.getLogger(ParsePane.class.getName());
 }
