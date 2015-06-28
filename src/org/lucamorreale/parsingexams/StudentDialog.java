@@ -33,14 +33,14 @@ public final class StudentDialog extends JDialog {
 
     private final String dbTable;
 
-    public StudentDialog(String db_table) {
+    public StudentDialog(String dbTable) {
         super();
         this.setAlwaysOnTop(true);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setTitle("Aggiungi Matricola");
         this.setLayout(new BorderLayout(0, 0));
 
-        dbTable = db_table;
+        this.dbTable = dbTable;
 
         saveButton = new JButton("Salva");
         cancelButton = new JButton("Cancel");
